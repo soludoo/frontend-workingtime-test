@@ -37,6 +37,7 @@ const Page = () => {
   const [isModalReasonOpen, setIsModalReasonOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [workTimeText, setWorkTimeText] = useState("0h 0m");
+
   const todayId = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
@@ -45,25 +46,43 @@ const Page = () => {
     (async () => {
       const PouchDB = (await import("pouchdb-browser")).default;
       db = new PouchDB("attendance_db");
-      fetchData();
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const fetchData = async () => {
-    if (!db) return;
-    try {
-      const doc = await db.get(todayId);
-      setAttendance(doc);
-    } catch (err: any) {
-      if (err.status === 404) setAttendance(null);
-      else console.error(err);
-    }
-  };
+      const existing = await db.allDocs({ include_docs: true });
+      const todayDoc = existing.rows.find((r: any) => r.id === todayId);
+
+      if (todayDoc) {
+        setAttendance(todayDoc.doc);
+      } else {
+        const newDoc: Attendance = { _id: todayId, date: todayId, events: [] };
+        await db.put(newDoc);
+        setAttendance(newDoc);
+      }
+    })();
+  }, [todayId]);
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const interval = setInterval(async () => {
+      const currentId = new Date().toISOString().split("T")[0];
+      if (currentId !== todayId && db) {
+        try {
+          const exists = await db.get(currentId).catch(() => null);
+          if (exists) setAttendance(exists);
+          else {
+            const newDoc: Attendance = {
+              _id: currentId,
+              date: currentId,
+              events: [],
+            };
+            await db.put(newDoc);
+            setAttendance(newDoc);
+          }
+        } catch (err) {
+          console.error("Error creating new day doc:", err);
+        }
+      }
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
   }, [todayId]);
 
   useEffect(() => {
@@ -74,26 +93,36 @@ const Page = () => {
     const calculateProgress = () => {
       const startTime = new Date(clockInEvent.time).getTime();
       const lastEvent = attendance.events[attendance.events.length - 1];
+      const now = Date.now();
+
       const endTime =
         lastEvent.type === "clock_out"
           ? new Date(lastEvent.time).getTime()
-          : Date.now();
+          : now;
 
-      const breakPairs = [];
-      for (let i = 0; i < attendance.events.length; i++) {
-        if (attendance.events[i].type === "break_start") {
-          const breakStart = new Date(attendance.events[i].time).getTime();
-          const breakEndEvent = attendance.events.find(
-            (e, idx) => idx > i && e.type === "break_end"
-          );
-          if (breakEndEvent) {
-            const breakEnd = new Date(breakEndEvent.time).getTime();
-            breakPairs.push(breakEnd - breakStart);
-          }
+      const breakPairs: [number, number][] = [];
+      let currentBreakStart: number | null = null;
+
+      for (const e of attendance.events) {
+        if (e.type === "break_start") {
+          currentBreakStart = new Date(e.time).getTime();
+        } else if (e.type === "break_end" && currentBreakStart) {
+          const breakEnd = new Date(e.time).getTime();
+          breakPairs.push([currentBreakStart, breakEnd]);
+          currentBreakStart = null;
         }
       }
 
-      const totalBreakMs = breakPairs.reduce((a, b) => a + b, 0);
+      if (currentBreakStart) {
+        const ongoingBreak: any = [currentBreakStart, now];
+        breakPairs.push(ongoingBreak);
+      }
+
+      const totalBreakMs = breakPairs.reduce(
+        (sum, [start, end]) => sum + (end - start),
+        0
+      );
+
       const diff = endTime - startTime - totalBreakMs;
 
       const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -110,8 +139,10 @@ const Page = () => {
   }, [attendance]);
 
   const addEvent = async (type: AttendanceEvent["type"], reason?: string) => {
+    if (!db) return;
     const now = new Date().toISOString();
     let doc: Attendance;
+
     try {
       doc = await db.get(todayId);
     } catch (err: any) {
@@ -129,7 +160,7 @@ const Page = () => {
   };
 
   const renderButton = () => {
-    if (!attendance) {
+    if (!attendance || attendance.events.length === 0) {
       return (
         <Button
           variant="rounded"
@@ -157,7 +188,7 @@ const Page = () => {
         return (
           <Button
             onClick={async () => {
-              await addEvent("break_end", "");
+              await addEvent("break_end");
             }}
             variant="rounded"
             size="big"
@@ -166,7 +197,7 @@ const Page = () => {
           </Button>
         );
       case "clock_out":
-        return;
+        return <p className="text-green-600 font-semibold">✅ Completed</p>;
       default:
         return (
           <Button
@@ -198,12 +229,12 @@ const Page = () => {
           setIsModalReasonOpen(false);
         }}
       />
-      <section className="bg-background flex flex-col gap-5 items-center py-10 px-4 justify-between h-screen max-w-lg mx-auto">
+      <section className="bg-background flex flex-col gap-5 items-center py-5 px-4 justify-between min-h-[calc(100vh-75px)] max-w-lg mx-auto">
         <div className="flex flex-col gap-5 w-full">
           <div className="flex flex-col gap-2 items-center">
             <h1 className="text-2xl font-semibold">Absence Tracking</h1>
             <p className="text-blue-600">
-              {!attendance
+              {!attendance || attendance.events.length === 0
                 ? "Not clocked in"
                 : (() => {
                     const last =
@@ -244,20 +275,26 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-8 px-5 items-center w-full">
+        <div className="flex flex-col gap-8 md:px-5 items-center w-full">
           {renderButton()}
-          {attendance && (
-            <div className="flex flex-col gap-5 p-5 bg-white rounded w-full">
+          {attendance && attendance.events.length > 0 && (
+            <div className="flex flex-col gap-5 p-5 bg-white rounded w-full max-h-[325px] overflow-y-auto">
               <h2 className="text-black font-bold text-start">
                 Today’s Timeline
               </h2>
               <ul className="flex flex-col gap-3">
                 {attendance.events.map((e: any, i) => (
                   <li key={i} className="flex items-center gap-2">
-                    {e.type === "clock_in" && <Clock />}
-                    {e.type === "clock_out" && <Power />}
-                    {e.type.includes("break") && <Coffee />}
-                    <p className="text-black">
+                    {e.type === "clock_in" && (
+                      <Clock className="min-w-6 min-h-6 text-green-500" />
+                    )}
+                    {e.type === "clock_out" && (
+                      <Power className="min-w-6 min-h-6 text-red-600" />
+                    )}
+                    {e.type.includes("break") && (
+                      <Coffee className="min-w-6 min-h-6 text-yellow-500" />
+                    )}
+                    <p className="text-black text-sm md:text-base">
                       {new Date(e.time).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -291,7 +328,7 @@ const Page = () => {
         </div>
         <div className="flex flex-col gap-2 w-full px-5">
           <p className="text-black/70 text-sm text-center">
-            {workTimeText} / {WORK_GOAL_HOURS}h 24m goal reached
+            {workTimeText} / {WORK_GOAL_HOURS}h goal reached
           </p>
           <Progress value={progress} className="w-full" />
         </div>
