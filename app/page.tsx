@@ -278,7 +278,7 @@ const Page = () => {
         <div className="flex flex-col gap-8 md:px-5 items-center w-full">
           {renderButton()}
           {attendance && attendance.events.length > 0 && (
-            <div className="flex flex-col gap-5 p-5 bg-white rounded w-full max-h-[325px] overflow-y-auto">
+            <div className="flex flex-col gap-5 p-5 bg-white rounded w-full md:max-h-[400px] max-h-[300px] overflow-y-auto">
               <h2 className="text-black font-bold text-start">
                 Today’s Timeline
               </h2>
@@ -326,7 +326,7 @@ const Page = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-2 w-full px-5">
+        <div className="flex flex-col gap-2 w-full md:px-5">
           <p className="text-black/70 text-sm text-center">
             {workTimeText} / {WORK_GOAL_HOURS}h goal reached
           </p>
