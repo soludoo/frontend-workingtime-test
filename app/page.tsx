@@ -198,7 +198,7 @@ const Page = () => {
           setIsModalReasonOpen(false);
         }}
       />
-      <section className="bg-background flex flex-col gap-5 items-center py-10 justify-between h-screen max-w-lg mx-auto">
+      <section className="bg-background flex flex-col gap-5 items-center py-10 px-4 justify-between h-screen max-w-lg mx-auto">
         <div className="flex flex-col gap-5 w-full">
           <div className="flex flex-col gap-2 items-center">
             <h1 className="text-2xl font-semibold">Absence Tracking</h1>
