@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Calendar, Clock, Power, Coffee } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import PouchDB from "pouchdb-browser";
 import ClockInModal from "@/components/modals/clock-in";
 import ReasonModal from "@/components/modals/reason";
 
-const db = new PouchDB("attendance_db");
+let db: any = null;
 
 interface AttendanceEvent {
   type:
@@ -41,19 +40,30 @@ const Page = () => {
   const todayId = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const doc = await db.get(todayId);
-        setAttendance(doc as any);
-      } catch (err: any) {
-        if (err.status === 404) {
-          setAttendance(null);
-        } else {
-          console.error(err);
-        }
-      }
-    };
+    if (typeof window === "undefined") return;
+
+    (async () => {
+      const PouchDB = (await import("pouchdb-browser")).default;
+      db = new PouchDB("attendance_db");
+      fetchData();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchData = async () => {
+    if (!db) return;
+    try {
+      const doc = await db.get(todayId);
+      setAttendance(doc);
+    } catch (err: any) {
+      if (err.status === 404) setAttendance(null);
+      else console.error(err);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todayId]);
 
   useEffect(() => {
