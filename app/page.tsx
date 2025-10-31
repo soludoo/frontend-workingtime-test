@@ -7,6 +7,8 @@ import { Calendar, Clock, Power, Coffee } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ClockInModal from "@/components/modals/clock-in";
 import ReasonModal from "@/components/modals/reason";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 let db: any = null;
 
@@ -232,7 +234,23 @@ const Page = () => {
       <section className="bg-background flex flex-col gap-5 items-center py-5 px-4 justify-between min-h-[calc(100vh-75px)] max-w-lg mx-auto">
         <div className="flex flex-col gap-5 w-full">
           <div className="flex flex-col gap-2 items-center">
-            <h1 className="text-2xl font-semibold">Absence Tracking</h1>
+            <div className="flex items-center justify-between w-full">
+              <Image
+                src={"https://github.com/evilrabbit.png"}
+                alt="Logo"
+                width={100}
+                height={50}
+                className="w-[40px] h-auto"
+              />
+              <h1 className="text-2xl font-semibold">Absence Tracking</h1>
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
             <p className="text-blue-600">
               {!attendance || attendance.events.length === 0
                 ? "Not clocked in"
