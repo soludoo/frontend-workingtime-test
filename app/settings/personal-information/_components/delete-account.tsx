@@ -1,13 +1,21 @@
 "use client";
+import DeleteAccountModal from "@/components/modals/delete-account";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 
 const DeleteAccount = () => {
+  const [open, setOpen] = React.useState(false);
   return (
-    <button className="flex items-center justify-between px-5">
-      <p className="text-red text-sm">Delete your account</p>
-      <ChevronRight className="size-5 text-red" />
-    </button>
+    <>
+      <DeleteAccountModal open={open} onClose={() => setOpen(false)} />
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center justify-between px-5"
+      >
+        <p className="text-red text-sm">Delete your account</p>
+        <ChevronRight className="size-5 text-red" />
+      </button>
+    </>
   );
 };
 

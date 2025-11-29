@@ -23,7 +23,7 @@ const Picture = () => {
 
   return (
     <div
-      className="flex flex-col gap-3 items-center justify-center cursor-pointer"
+      className="flex flex-col gap-3 items-center justify-center cursor-pointer w-fit mx-auto"
       onClick={handlePickImage}
     >
       <Avatar className="size-[120px]">

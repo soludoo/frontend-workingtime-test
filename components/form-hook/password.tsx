@@ -8,24 +8,26 @@ import {
 } from "../ui/form";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Input } from "../ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import { EyeClosed, EyeIcon } from "lucide-react";
+import { useState } from "react";
 
-const InputWithForm = ({
+const PasswordInputWithForm = ({
   name,
   label,
-  type = "text",
   className,
   classNameWrapper,
   placeholder,
-  isCurrency = false,
   disabled = false,
   classNameLabel,
   readOnly,
-  isPhone = false,
 }: {
   name: string;
   label?: string;
-  type?: string;
   className?: string;
   classNameWrapper?: string;
   placeholder?: string;
@@ -33,22 +35,9 @@ const InputWithForm = ({
   disabled?: boolean;
   classNameLabel?: string;
   readOnly?: boolean;
-  isPhone?: boolean;
 }) => {
   const form = useFormContext();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    if (isPhone) {
-      value = value.replace(/[^0-9-]/g, "");
-      const parts = value.split("-").map((part) => part.replace(/\D/g, ""));
-      value = parts.join("-");
-    }
-    if (isCurrency && value) {
-      value = new Intl.NumberFormat("en-US").format(parseInt(value, 10));
-    }
-    form.setValue(name, isPhone ? value : value);
-  };
+  const [type, setType] = useState<"password" | "text">("password");
 
   return (
     <FormField
@@ -66,16 +55,24 @@ const InputWithForm = ({
             </FormLabel>
           )}
           <FormControl className={cn("w-full", className)}>
-            <Input
-              type={type}
-              {...field}
-              value={field.value || ""}
-              autoComplete="off"
-              placeholder={placeholder}
-              onChange={isCurrency || isPhone ? handleChange : field.onChange}
-              disabled={disabled}
-              readOnly={readOnly}
-            />
+            <InputGroup>
+              <InputGroupInput
+                type={type}
+                {...field}
+                value={field.value || ""}
+                autoComplete="off"
+                placeholder={placeholder}
+                disabled={disabled}
+                readOnly={readOnly}
+              />
+              <InputGroupAddon align={"inline-end"}>
+                {type === "password" ? (
+                  <EyeIcon onClick={() => setType("text")} />
+                ) : (
+                  <EyeClosed onClick={() => setType("password")} />
+                )}
+              </InputGroupAddon>
+            </InputGroup>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -84,4 +81,4 @@ const InputWithForm = ({
   );
 };
 
-export default InputWithForm;
+export default PasswordInputWithForm;
