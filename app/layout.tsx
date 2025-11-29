@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased bg-[#DBDBDB]`}>
-        <main className="mx-auto max-w-md bg-white max-h-[calc(100vh-75px)] h-[calc(100vh-75px)] overflow-auto">
+        <main className="mx-auto max-w-md bg-white max-h-[calc(100dvh-75px)] h-[calc(100dvh-75px)] overflow-auto">
           {children}
         </main>
         <Footer />
