@@ -6,14 +6,14 @@ import DeleteAccount from "./_components/delete-account";
 
 const Page = () => {
   return (
-    <div className="flex flex-col pb-20">
+    <section className="flex flex-col h-full">
       <PageTitleBack title="Personal Information" />
       <div className="py-5 flex flex-col gap-5">
         <Picture />
         <PersonalInformation />
         <DeleteAccount />
       </div>
-    </div>
+    </section>
   );
 };
 
