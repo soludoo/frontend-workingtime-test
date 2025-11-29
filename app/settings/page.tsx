@@ -5,13 +5,13 @@ import Sections from "./_components/sections";
 
 const Page = () => {
   return (
-    <>
+    <div className="flex flex-col pb-20">
       <PageTitle title="Settings" />
       <div className="flex-1 py-5 flex flex-col gap-5 px-5">
         <ProfilePictures name="Jenny Wilson" join="Joined August 17, 2024" />
       </div>
       <Sections />
-    </>
+    </div>
   );
 };
 
