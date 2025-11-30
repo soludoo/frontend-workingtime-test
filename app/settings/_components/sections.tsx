@@ -24,7 +24,7 @@ const Sections = () => {
           {
             icon: <Building2 className="size-5 text-black" />,
             title: "Company settings",
-            url: "/settings/company-settings",
+            url: "/settings/company",
           },
           {
             icon: <FileSliders className="size-5 text-black" />,

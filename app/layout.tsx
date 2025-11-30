@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/share/footer";
+import PrimaryColorProvider from "@/components/theme/primary-color-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,10 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased bg-[#DBDBDB]`}>
-        <main className="mx-auto max-w-md bg-white max-h-[calc(100dvh-75px)] h-[calc(100dvh-75px)] overflow-auto pb-20">
+        <main className="mx-auto max-w-md bg-white max-h-[calc(100dvh-75px)] h-[calc(100dvh-75px)] overflow-auto pb-5">
           {children}
         </main>
         <Footer />
+        <PrimaryColorProvider />
       </body>
     </html>
   );
