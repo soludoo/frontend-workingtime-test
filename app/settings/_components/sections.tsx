@@ -13,7 +13,7 @@ import React from "react";
 
 const Sections = () => {
   return (
-    <div className="flex flex-col gap-4 px-5">
+    <div className="flex flex-col gap-4">
       <BorderSection
         content={[
           {
