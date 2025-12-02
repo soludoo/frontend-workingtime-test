@@ -8,7 +8,7 @@ const CompanyInformation = () => {
   return (
     <div className="px-5 flex flex-col gap-4">
       <button
-        onClick={() => router.push(`/settings/company/edit/company-name`)}
+        onClick={() => router.push(`/settings/company/company-name`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Company name</p>
@@ -19,7 +19,7 @@ const CompanyInformation = () => {
       </button>
       <div className="border-b border-border w-full" />
       <button
-        onClick={() => router.push(`/settings/company/edit/category`)}
+        onClick={() => router.push(`/settings/company/category`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Industry / category</p>
@@ -30,7 +30,7 @@ const CompanyInformation = () => {
       </button>
       <div className="border-b border-border w-full" />
       <button
-        onClick={() => router.push(`/settings/company/edit/brand-color`)}
+        onClick={() => router.push(`/settings/company/brand-color`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Brand color</p>
@@ -43,7 +43,7 @@ const CompanyInformation = () => {
       </button>
       <div className="border-b border-border w-full" />
       <button
-        onClick={() => router.push(`/settings/company/edit/support-email`)}
+        onClick={() => router.push(`/settings/company/support-email`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Support email</p>
@@ -54,7 +54,7 @@ const CompanyInformation = () => {
       </button>
       <div className="border-b border-border w-full" />
       <button
-        onClick={() => router.push(`/settings/company/edit/company-phone`)}
+        onClick={() => router.push(`/settings/company/company-phone`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Company phone</p>
@@ -65,7 +65,7 @@ const CompanyInformation = () => {
       </button>
       <div className="border-b border-border w-full" />
       <button
-        onClick={() => router.push(`/settings/company/edit/address`)}
+        onClick={() => router.push(`/settings/company/address`)}
         className="flex items-center justify-between"
       >
         <p className="text-black text-sm">Address</p>

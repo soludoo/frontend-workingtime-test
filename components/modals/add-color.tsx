@@ -18,6 +18,7 @@ import {
   ColorPreview,
 } from "../ui/color-picker";
 import { Input } from "../ui/input";
+import Color from "color";
 
 const STORAGE_KEY = "brand-color-customize";
 
@@ -81,12 +82,9 @@ const AddColor = ({
             className="w-full"
             onChange={(val) => {
               if (!Array.isArray(val)) return;
-
-              const [r, g, b] = val;
-              const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b)
-                .toString(16)
-                .slice(1)}`;
-
+              console.log(val);
+              const [r, g, b, a] = val;
+              const hex = Color.rgb(r, g, b).alpha(a).hexa();
               setSelectedHex(hex);
             }}
           >
