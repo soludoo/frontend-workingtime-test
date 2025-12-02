@@ -82,7 +82,6 @@ const AddColor = ({
             className="w-full"
             onChange={(val) => {
               if (!Array.isArray(val)) return;
-              console.log(val);
               const [r, g, b, a] = val;
               const hex = Color.rgb(r, g, b).alpha(a).hexa();
               setSelectedHex(hex);
