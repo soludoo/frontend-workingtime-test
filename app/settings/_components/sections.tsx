@@ -43,7 +43,7 @@ const Sections = () => {
           {
             icon: <FileQuestionMark className="size-5 text-black" />,
             title: "Help & Support",
-            url: "/settings/help-support",
+            url: "/settings/support",
           },
           {
             icon: <Info className="size-5 text-black" />,
