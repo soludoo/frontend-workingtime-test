@@ -97,7 +97,11 @@ const PhoneInputWithForm = ({
                   </span>
                   <ChevronDown className="size-5 text-black" />
                 </button>
-                <CommandDialog open={open} onOpenChange={setOpen}>
+                <CommandDialog
+                  open={open}
+                  onOpenChange={setOpen}
+                  className="w-[90%] max-w-md"
+                >
                   <CommandInput placeholder="Type your country.." />
                   <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
