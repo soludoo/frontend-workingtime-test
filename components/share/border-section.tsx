@@ -27,13 +27,13 @@ const BorderSection = ({
                 {item.icon}
                 <h2 className="text-sm text-black">{item.title}</h2>
               </div>
-              <button>
+              <div>
                 {item.customIcon ? (
                   item.customIcon
                 ) : (
                   <ChevronRight className="size-5 text-body" />
                 )}
-              </button>
+              </div>
             </button>
             {index + 1 !== content.length && (
               <div className="border-t border-border" />

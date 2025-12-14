@@ -14,7 +14,7 @@ const CardSummary = ({
       {icons}
       <div className="flex flex-col">
         <h4 className="font-medium text-black">{time}</h4>
-        <p className="text-secondary text-[10px]">{title}</p>
+        <p className="text-body text-[10px]">{title}</p>
       </div>
     </div>
   );

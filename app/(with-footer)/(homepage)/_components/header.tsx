@@ -15,7 +15,7 @@ const Header = () => {
           <h2 className="text-black text-xl">
             Hi, <span className="font-semibold">Jenny!</span>
           </h2>
-          <p className="text-secondary text-sm">Thursday, 6 November 2025</p>
+          <p className="text-body text-sm">Thursday, 6 November 2025</p>
         </div>
       </div>
       <Link href={"/notifications"}>

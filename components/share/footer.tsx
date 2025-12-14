@@ -20,8 +20,8 @@ const Footer = () => {
             className={cn(
               "flex flex-col gap-1 items-center text-xs h-full pt-3",
               pathname === "/"
-                ? "text-primary border-t-2 border-primary"
-                : "text-secondary"
+                ? "text-primary border-t-2 border-primary dark:border-black dark:text-black"
+                : "text-body"
             )}
           >
             <FileClock className="min-w-6 min-h-6 size-6" />
@@ -39,8 +39,8 @@ const Footer = () => {
             className={cn(
               "flex flex-col gap-1 items-center text-xs h-full pt-3",
               pathname.includes("/settings")
-                ? "text-primary border-t-2 border-primary"
-                : "text-secondary"
+                ? "text-primary border-t-2 border-primary dark:border-black dark:text-black"
+                : "text-body"
             )}
           >
             <Settings className="min-w-6 min-h-6 size-6" />

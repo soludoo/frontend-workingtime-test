@@ -7,7 +7,7 @@ import Past from "./past";
 const Content = () => {
   const [tab, setTab] = useState("current");
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full pb-5">
       <div className="flex">
         <button
           onClick={() => setTab("current")}

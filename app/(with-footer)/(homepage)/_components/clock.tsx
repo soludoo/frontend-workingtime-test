@@ -19,7 +19,7 @@ const ClockContent = () => {
                 icon={<RefreshCw className="size-6" />}
                 onClick={() => setIsBreak(false)}
               />
-              <p className="text-secondary italic text-sm">
+              <p className="text-body italic text-sm">
                 Back to work — nice energy!
               </p>
             </>
@@ -31,7 +31,7 @@ const ClockContent = () => {
                 icon={<Pause className="size-6" />}
                 onClick={() => setIsBreak(true)}
               />
-              <p className="text-secondary italic text-sm">
+              <p className="text-body italic text-sm">
                 Taking a break ☕ — don’t forget to come back!
               </p>
             </>
@@ -44,7 +44,7 @@ const ClockContent = () => {
               icon={<Play className="size-6" />}
               onClick={() => setIsWorking(true)}
             />
-            <p className="text-secondary italic text-sm">
+            <p className="text-body italic text-sm">
               Let’s start your workday!
             </p>
           </>
@@ -56,7 +56,7 @@ const ClockContent = () => {
             title="Stop"
             icon={<CircleX className="size-6" />}
           />
-          <p className="text-secondary italic text-sm">
+          <p className="text-body italic text-sm">
             Worked 8 hours today — awesome job 🎉
           </p>
         </>

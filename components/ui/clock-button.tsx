@@ -6,10 +6,10 @@ import { cva, type VariantProps } from "class-variance-authority";
 const clockVariantsOuter = cva("", {
   variants: {
     color: {
-      green: "bg-green-50",
-      yellow: "bg-yellow-50",
-      blue: "bg-blue-50",
-      red: "bg-red-50",
+      green: "bg-green-50 dark:bg-green-700",
+      yellow: "bg-yellow-50 dark:bg-yellow-700",
+      blue: "bg-blue-50 dark:bg-blue-700",
+      red: "bg-red-50 dark:bg-red-700",
     },
   },
   defaultVariants: { color: "green" },
@@ -18,10 +18,10 @@ const clockVariantsOuter = cva("", {
 const clockVariantsMiddle = cva("", {
   variants: {
     color: {
-      green: "bg-green-100",
-      yellow: "bg-yellow-100",
-      blue: "bg-blue-100",
-      red: "bg-red-100",
+      green: "bg-green-100 dark:bg-green-600",
+      yellow: "bg-yellow-100 dark:bg-yellow-600",
+      blue: "bg-blue-100 dark:bg-blue-600",
+      red: "bg-red-100 dark:bg-red-600",
     },
   },
   defaultVariants: { color: "green" },
@@ -64,7 +64,10 @@ const ClockButton = ({ title, icon, color, ...props }: ClockButtonProps) => {
         <Button
           variant="rounded"
           size="big"
-          className={cn("flex flex-col gap-2", clockVariantsInner({ color }))}
+          className={cn(
+            "flex flex-col gap-2 dark:text-black",
+            clockVariantsInner({ color })
+          )}
           {...props}
         >
           {icon}

@@ -1,6 +1,7 @@
 "use client";
 import SignOut from "@/components/modals/sign-out";
 import BorderSection from "@/components/share/border-section";
+import { DarkModeSwitch } from "@/components/theme/dark-mode-switch";
 import {
   Building2,
   CircleUserRound,
@@ -39,11 +40,12 @@ const Sections = () => {
         />
         <BorderSection
           content={[
-            //   {
-            //     icon: <SunMoon className="size-5 text-black" />,
-            //     title: "Appearance",
-            //     customAction: () => {},
-            //   },
+            {
+              icon: <SunMoon className="size-5 text-black" />,
+              title: "Appearance",
+              customIcon: <DarkModeSwitch />,
+              customAction: () => {},
+            },
             {
               icon: <FileQuestionMark className="size-5 text-black" />,
               title: "Help & Support",

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import PrimaryColorProvider from "@/components/theme/primary-color-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,10 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased bg-[#DBDBDB]`}>
-        {children}
-        <PrimaryColorProvider />
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a]`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <PrimaryColorProvider />
+        </ThemeProvider>
       </body>
     </html>
   );

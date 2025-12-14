@@ -7,7 +7,7 @@ import History from "./history";
 const Content = () => {
   const [tab, setTab] = useState("active-request");
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full pb-5">
       <div className="flex">
         <button
           onClick={() => setTab("active-request")}
