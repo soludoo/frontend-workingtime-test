@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PrimaryColorProvider from "@/components/theme/primary-color-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <PrimaryColorProvider />
+          <Toaster richColors position="top-center" />
         </ThemeProvider>
       </body>
     </html>

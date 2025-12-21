@@ -4,23 +4,41 @@ import PasswordInputWithForm from "@/components/form-hook/password";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { loginSchema, LoginSchema } from "./login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "user@example.com",
+      password: "password123",
     },
   });
   const router = useRouter();
 
   const onSubmit = async (data: LoginSchema) => {
-    console.log(data);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(result.message || "Login failed");
+        return;
+      }
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
