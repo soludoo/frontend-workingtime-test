@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 
 const SelectWithForm = ({
   options,
@@ -26,6 +27,7 @@ const SelectWithForm = ({
   classNameLabel,
   disabled,
   customOnChange,
+  icon,
 }: {
   options: {
     key: string | number;
@@ -39,6 +41,7 @@ const SelectWithForm = ({
   classNameLabel?: string;
   disabled?: boolean;
   customOnChange?: (e: any) => void;
+  icon?: ReactNode;
 }) => {
   const form = useFormContext();
 
@@ -52,7 +55,7 @@ const SelectWithForm = ({
         >
           {label && (
             <FormLabel
-              className={cn("font-bold text-sm text-black", classNameLabel)}
+              className={cn("font-medium text-xs text-black", classNameLabel)}
             >
               {label}
             </FormLabel>
@@ -64,9 +67,15 @@ const SelectWithForm = ({
             <FormControl>
               <SelectTrigger
                 disabled={disabled}
-                className={cn("w-full", className)}
+                className={cn("w-full font-medium", className)}
               >
-                <SelectValue placeholder={placeholder} />
+                <div className="flex items-center gap-3">
+                  {icon}
+                  <SelectValue
+                    placeholder={placeholder}
+                    className="font-medium"
+                  />
+                </div>
               </SelectTrigger>
             </FormControl>
             <SelectContent>
