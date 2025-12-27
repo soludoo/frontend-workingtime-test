@@ -40,7 +40,7 @@ const SidebarAdmin = () => {
           const isOpen = openMenus[item.name];
 
           return (
-            <li key={item.name}>
+            <li key={item.name} className="overflow-hidden">
               <div
                 className={cn(
                   "flex items-center justify-between gap-3 text-sm font-medium py-[8.5px] px-2 rounded-md cursor-pointer transition-colors",
@@ -66,29 +66,31 @@ const SidebarAdmin = () => {
                   ))}
               </div>
               {item.children && isOpen && (
-                <ul className="flex flex-col mt-1 ml-4">
-                  {item.children.map((subItem) => {
-                    const isSubActive = subItem.href === pathname;
+                <div className="flex gap-2.5 h-full ml-4 overflow-hidden">
+                  <div className="h-full w-px bg-border" />
+                  <ul className="flex flex-col mt-1 gap-0.5 w-full">
+                    {item.children.map((subItem) => {
+                      const isSubActive = subItem.href === pathname;
 
-                    return (
-                      <li key={subItem.name} className="flex gap-2.5">
-                        <div className="h-10 w-px bg-border" />
-                        <Link
-                          href={subItem.href}
-                          className={cn(
-                            "flex-1 flex items-center gap-3 text-sm font-medium py-[8.5px] px-2 rounded-md transition-colors",
-                            isSubActive
-                              ? "bg-primary-admin/10 text-primary-admin"
-                              : "text-body hover:text-primary-admin hover:bg-primary-admin/10"
-                          )}
-                        >
-                          {subItem.icons}
-                          {subItem.name}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+                      return (
+                        <li key={subItem.name} className="flex gap-2.5">
+                          <Link
+                            href={subItem.href}
+                            className={cn(
+                              "flex-1 flex items-center gap-3 text-sm font-medium py-[8.5px] px-2 rounded-md transition-colors",
+                              isSubActive
+                                ? "bg-primary-admin/10 text-primary-admin"
+                                : "text-body hover:text-primary-admin hover:bg-primary-admin/10"
+                            )}
+                          >
+                            {subItem.icons}
+                            {subItem.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               )}
             </li>
           );
