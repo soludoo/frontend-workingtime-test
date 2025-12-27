@@ -38,7 +38,7 @@ const DateRangeFilter = ({
         <Button
           variant="outline"
           className={cn(
-            "w-fit h-9 rounded-[10px] hover:bg-transparent hover:text-muted-foreground text-muted-foreground text-sm justify-between font-normal",
+            "w-fit h-10 rounded-[10px] hover:bg-transparent hover:text-muted-foreground text-muted-foreground text-sm justify-between font-normal",
             className
           )}
         >

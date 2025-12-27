@@ -30,7 +30,10 @@ const SelectFilter = ({
 }: SelectFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className={cn("rounded-[10px] text-body", className)}>
+      <SelectTrigger
+        size="sm"
+        className={cn("rounded-[10px] text-body", className)}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
