@@ -4,7 +4,6 @@ import PasswordInputWithForm from "@/components/form-hook/password";
 import PhoneInputWithForm from "@/components/form-hook/phone";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchema } from "./register.schema";

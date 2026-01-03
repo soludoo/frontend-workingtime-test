@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import InputWithForm from "@/components/form-hook/input";
 import PasswordInputWithForm from "@/components/form-hook/password";
@@ -8,12 +9,15 @@ import { FormProvider, useForm } from "react-hook-form";
 import { loginSchema, LoginSchema } from "./login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "user@example.com",
+      email: "john.doe@example.com",
       password: "password123",
     },
   });
@@ -21,6 +25,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginSchema) => {
     try {
+      setIsLoading(true);
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -36,8 +41,11 @@ const LoginForm = () => {
         return;
       }
       router.push("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      toast.error(error.message || "Something went wrong!!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,11 +58,17 @@ const LoginForm = () => {
         <div className="flex flex-col gap-4">
           <InputWithForm name="email" type="email" label="Email address" />
           <PasswordInputWithForm name="password" label="Password" />
-          <Link href={"/forgot-password"} className="text-primary text-xs">
+          <Link
+            href={"/forgot-password"}
+            className="text-primary text-xs w-fit"
+          >
             Forgot password?
           </Link>
         </div>
-        <Button className="text-sm">Sign In</Button>
+        <Button className="text-sm" disabled={isLoading}>
+          {isLoading && <Spinner />}
+          Sign In
+        </Button>
         <div className="w-full border-b border-border" />
         <div className="flex flex-col gap-4">
           <p className="text-body text-center text-sm">
