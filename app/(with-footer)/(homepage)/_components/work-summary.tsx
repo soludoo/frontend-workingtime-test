@@ -1,19 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import CardSummary from "@/components/card/card-summary";
-import { useWorkTracker } from "@/hooks/use-work-tracker";
-import { formatDuration } from "@/lib/helper";
 import { Briefcase, ClipboardClock, TicketsPlane, Weight } from "lucide-react";
 import { useMemo } from "react";
 
-const WorkSummary = () => {
-  const { totalWorkedMs } = useWorkTracker();
-
+const WorkSummary = ({ data }: { data: any }) => {
   const summaries = useMemo(() => {
     return [
       {
         id: 1,
         title: "Worked",
-        desription: formatDuration(totalWorkedMs),
+        desription: data?.timer?.currentDuration || "0h 0m",
         icon: (
           <div className="size-10 rounded-full bg-purple-50 flex items-center justify-center">
             <Briefcase className="size-5 min-w-5 min-h-5 text-purple" />
@@ -23,7 +20,7 @@ const WorkSummary = () => {
       {
         id: 2,
         title: "Weekly balance",
-        desription: "+3h 20m",
+        desription: data?.workSummary?.weeklyBalance,
         icon: (
           <div className="size-10 rounded-full bg-blue-50 flex items-center justify-center">
             <Weight className="size-5 min-w-5 min-h-5 text-blue" />
@@ -33,7 +30,7 @@ const WorkSummary = () => {
       {
         id: 3,
         title: "Vacation",
-        desription: "Left 8d",
+        desription: data?.workSummary?.vacationLeft,
         icon: (
           <div className="size-10 rounded-full bg-green-50 flex items-center justify-center">
             <TicketsPlane className="size-5 min-w-5 min-h-5 text-green" />
@@ -43,7 +40,7 @@ const WorkSummary = () => {
       {
         id: 4,
         title: "Overtime",
-        desription: "4h",
+        desription: data?.workSummary?.overtime,
         icon: (
           <div className="size-10 rounded-full bg-yellow-50 flex items-center justify-center">
             <ClipboardClock className="size-5 min-w-5 min-h-5 text-yellow" />
@@ -51,7 +48,7 @@ const WorkSummary = () => {
         ),
       },
     ];
-  }, [totalWorkedMs]);
+  }, [data]);
 
   return (
     <div className="flex flex-col gap-4">

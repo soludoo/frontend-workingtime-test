@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
 
-const CompanyInformation = () => {
+const CompanyInformation = ({ data }: { data: any }) => {
   const router = useRouter();
+
   return (
     <div className="px-5 flex flex-col gap-4">
       <button
@@ -13,7 +14,7 @@ const CompanyInformation = () => {
       >
         <p className="text-black text-sm">Company name</p>
         <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">Acme Inc.</p>
+          <p className="text-body-400 text-sm">{data.company.name}</p>
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button>
@@ -24,7 +25,7 @@ const CompanyInformation = () => {
       >
         <p className="text-black text-sm">Industry / category</p>
         <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">IT company</p>
+          <p className="text-body-400 text-sm">{data.company.industry}</p>
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button>
@@ -48,7 +49,7 @@ const CompanyInformation = () => {
       >
         <p className="text-black text-sm">Support email</p>
         <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">Acmeinc@email.com</p>
+          <p className="text-body-400 text-sm">{data.company.support_email}</p>
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button>
@@ -59,7 +60,7 @@ const CompanyInformation = () => {
       >
         <p className="text-black text-sm">Company phone</p>
         <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">(+1) 740-8521</p>
+          <p className="text-body-400 text-sm">{data.company.company_phone}</p>
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button>
@@ -70,7 +71,7 @@ const CompanyInformation = () => {
       >
         <p className="text-black text-sm">Address</p>
         <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">45 Cloudy Bay, Auckland, NZ</p>
+          <p className="text-body-400 text-sm">{data.company.address}</p>
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button>

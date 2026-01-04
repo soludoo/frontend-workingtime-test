@@ -4,13 +4,15 @@ import ClockButton from "@/components/ui/clock-button";
 import { useWorkTracker } from "@/hooks/use-work-tracker";
 import { CircleX, Pause, Play, RefreshCw } from "lucide-react";
 import { useState } from "react";
-
-const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
+import ClockAnimation from "./clock-animation";
 
 const ClockContent = () => {
-  const { state, start, pause, resume, stop, totalWorkedMs } = useWorkTracker();
+  const { data, start, pause, resume, stop } = useWorkTracker();
   const [isModal, setIsModal] = useState(false);
-  const hasWorkedEightHours = totalWorkedMs >= EIGHT_HOURS_MS;
+
+  if (!data) {
+    return <ClockAnimation />;
+  }
 
   return (
     <>
@@ -20,9 +22,9 @@ const ClockContent = () => {
         onSelect={stop}
       />
       <div className="flex flex-col gap-y-2.5 items-center">
-        {!state.isContinue &&
-          (state.isWorking ? (
-            state.isPaused ? (
+        {!data?.timerStatus?.isContinue &&
+          (data?.timerStatus?.isActive ? (
+            data?.timerStatus?.isPaused ? (
               <>
                 <ClockButton
                   color="blue"
@@ -56,7 +58,7 @@ const ClockContent = () => {
               <p className="italic text-sm">Let’s start your workday!</p>
             </>
           ))}
-        {state.isContinue && (
+        {data?.timerStatus?.isContinue && (
           <>
             <ClockButton
               color="red"
@@ -64,7 +66,7 @@ const ClockContent = () => {
               icon={<CircleX className="size-6" />}
               onClick={() => setIsModal(true)}
             />
-            {hasWorkedEightHours && (
+            {data?.currentDuration?.includes("8h") && (
               <p className="italic text-sm">
                 Worked 8 hours today — awesome job 🎉
               </p>

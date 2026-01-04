@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -8,8 +8,27 @@ import {
 } from "../ui/dialog";
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const SignOut = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const handleSignOut = async () => {
+    try {
+      setIsLoading(true);
+      await fetch("/api/auth/sign-out", {
+        method: "POST",
+      });
+      router.refresh();
+    } catch (e) {
+      console.error("Sign out failed", e);
+      toast.error("Something went wrong!!");
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
@@ -31,8 +50,15 @@ const SignOut = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
           </div>
         </div>
         <DialogFooter className="flex-row">
-          <Button className="flex-1 text-sm bg-red">Sign Out</Button>
           <Button
+            disabled={isLoading}
+            className="flex-1 text-sm bg-red"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </Button>
+          <Button
+            disabled={isLoading}
             onClick={onClose}
             className="flex-1 text-sm bg-transparent text-black hover:text-white border border-border"
           >
