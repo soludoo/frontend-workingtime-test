@@ -1,10 +1,14 @@
+"use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useWorkTracker } from "@/hooks/use-work-tracker";
+import { getTodayDate } from "@/lib/helper";
 import { Bell } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const Header = () => {
+  const { data } = useWorkTracker();
+
   return (
     <div className="flex items-center justify-between gap-10">
       <div className="flex items-center gap-3">
@@ -13,9 +17,12 @@ const Header = () => {
         </Avatar>
         <div className="flex flex-col gap-y-2">
           <h2 className="text-black text-xl">
-            Hi, <span className="font-semibold">Jenny!</span>
+            Hi,{" "}
+            <span className="font-semibold">
+              {data?.dashboardData?.user?.name}
+            </span>
           </h2>
-          <p className="text-body text-sm">Thursday, 6 November 2025</p>
+          <p className="text-body text-sm"> {getTodayDate()}</p>
         </div>
       </div>
       <Link href={"/notifications"}>

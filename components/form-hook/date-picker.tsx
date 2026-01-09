@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import {
   FormControl,
@@ -65,7 +65,7 @@ const DatePickerWithForm = ({
                   {field.value
                     ? new Date(field.value).toLocaleDateString("en-GB")
                     : placeholder}
-                  <ChevronDownIcon className="ml-2 h-4 w-4 opacity-70" />
+                  <CalendarIcon className="ml-2 h-4 w-4 opacity-70" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent

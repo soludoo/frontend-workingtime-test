@@ -69,8 +69,8 @@ const LoginForm = () => {
           {isLoading && <Spinner />}
           Sign In
         </Button>
-        <div className="w-full border-b border-border" />
-        <div className="flex flex-col gap-4">
+        {/* <div className="w-full border-b border-border" /> */}
+        {/* <div className="flex flex-col gap-4">
           <p className="text-body text-center text-sm">
             Don{"'"}t have an account yet?
           </p>
@@ -82,7 +82,7 @@ const LoginForm = () => {
           >
             Create account
           </Button>
-        </div>
+        </div> */}
       </form>
     </FormProvider>
   );

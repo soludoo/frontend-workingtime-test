@@ -10,7 +10,7 @@ const WorkSummary = ({ data }: { data: any }) => {
       {
         id: 1,
         title: "Worked",
-        desription: data?.timer?.currentDuration || "0h 0m",
+        desription: data?.workSummary?.totalWorked || "0h 0m",
         icon: (
           <div className="size-10 rounded-full bg-purple-50 flex items-center justify-center">
             <Briefcase className="size-5 min-w-5 min-h-5 text-purple" />

@@ -19,6 +19,7 @@ const TextAreaWithForm = ({
   disabled = false,
   classNameLabel,
   readOnly,
+  classNameInput,
 }: {
   name: string;
   label?: string;
@@ -26,11 +27,10 @@ const TextAreaWithForm = ({
   className?: string;
   classNameWrapper?: string;
   placeholder?: string;
-  isCurrency?: boolean;
   disabled?: boolean;
   classNameLabel?: string;
   readOnly?: boolean;
-  isPhone?: boolean;
+  classNameInput?: string;
 }) => {
   const form = useFormContext();
 
@@ -57,6 +57,7 @@ const TextAreaWithForm = ({
               placeholder={placeholder}
               disabled={disabled}
               readOnly={readOnly}
+              className={classNameInput}
             />
           </FormControl>
           <FormMessage />

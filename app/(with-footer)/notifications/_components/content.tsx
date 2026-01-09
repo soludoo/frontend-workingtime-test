@@ -1,6 +1,24 @@
-import React from "react";
+"use client";
+import LoadingContent from "@/components/layout/loading-content";
+import { useEffect, useState } from "react";
 
 const Content = () => {
+  const [data, setData] = useState(undefined);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/notifications");
+      const { data } = await res.json();
+      console.log(data);
+      setData(data);
+    };
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <LoadingContent />;
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="h-10 bg-primary/10 text-monochrome-500 flex items-center px-5 text-sm">

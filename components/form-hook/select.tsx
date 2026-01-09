@@ -67,7 +67,10 @@ const SelectWithForm = ({
             <FormControl>
               <SelectTrigger
                 disabled={disabled}
-                className={cn("w-full font-medium", className)}
+                className={cn(
+                  "w-full font-medium border-primary rounded-2xl",
+                  className
+                )}
               >
                 <div className="flex items-center gap-3">
                   {icon}

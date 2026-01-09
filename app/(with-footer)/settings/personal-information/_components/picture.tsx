@@ -1,13 +1,27 @@
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Picture = () => {
   const [image, setImage] = React.useState<string>(
     "https://github.com/shadcn.png"
   );
-
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const res = await fetch(`/api/settings/photo`);
+  //     const { data } = await res.json();
+  //     console.log(data);
+
+  //     if (data?.photo_base64) {
+  //       const cleanBase64 = data.photo_base64.replace(/\s/g, "");
+  //       setImage(cleanBase64);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   const handlePickImage = () => {
     fileInputRef.current?.click();

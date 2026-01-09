@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BookCheck, Plus } from "lucide-react";
-import React from "react";
+import Link from "next/link";
 
 const History = () => {
   return (
@@ -18,10 +18,12 @@ const History = () => {
           </p>
         </div>
       </div>
-      <Button className="text-sm">
-        <Plus />
-        New Request
-      </Button>
+      <Link href={"/request-correction/request"}>
+        <Button className="text-sm">
+          <Plus />
+          New Request
+        </Button>
+      </Link>
     </div>
   );
 };
