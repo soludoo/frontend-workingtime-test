@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import SelectWithForm from "../form-hook/select";
 import TextAreaWithForm from "../form-hook/text-area";
 import { Button } from "../ui/button";
@@ -22,6 +23,21 @@ const StartWorking = ({
   onAction: () => void;
 }) => {
   const form = useForm();
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/projects");
+      const { data } = await res.json();
+      setOptions(
+        data.projects.map((item: { id: number; name: string }) => ({
+          key: item.id,
+          label: item.name,
+        }))
+      );
+    };
+    fetchData();
+  }, []);
 
   const onSubmit = () => {
     onAction();
@@ -45,7 +61,7 @@ const StartWorking = ({
             <SelectWithForm
               label="Project"
               name="project"
-              options={[]}
+              options={options}
               placeholder="Select project"
             />
             <SelectWithForm

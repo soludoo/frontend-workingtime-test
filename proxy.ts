@@ -6,6 +6,7 @@ const AUTH_PAGES = [
   "/register",
   "/forgot-password",
   "/reset-password",
+  "/on-boarding",
 ];
 
 export function proxy(req: NextRequest) {
@@ -22,7 +23,7 @@ export function proxy(req: NextRequest) {
 
   if (!token && !isAuthPage) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/on-boarding";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }

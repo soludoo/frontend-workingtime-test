@@ -6,7 +6,7 @@ const PageTitleAdmin = ({
   children,
 }: {
   title: string;
-  description: string;
+  description?: string;
   children?: ReactNode;
 }) => {
   return (

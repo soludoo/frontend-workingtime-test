@@ -11,11 +11,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const columns = (onRefresh: () => void): ColumnDef<any>[] => [
   {
     accessorKey: "name",
     header: "Employee name",
+    cell: ({ row }) => {
+      return (
+        <Link
+          href={`/admin/employees/${row.original.id}`}
+          className="hover:underline"
+        >
+          {row.original.name}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "role",
