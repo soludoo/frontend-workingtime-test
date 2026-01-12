@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import SelectWithForm from "../form-hook/select";
@@ -20,10 +21,11 @@ const StartWorking = ({
 }: {
   open: boolean;
   onClose: () => void;
-  onAction: () => void;
+  onAction: (value: any) => void;
 }) => {
   const form = useForm();
   const [options, setOptions] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,12 +37,24 @@ const StartWorking = ({
           label: item.name,
         }))
       );
+      const response = await fetch("/api/locations");
+      const { data: dataLocation } = await response.json();
+      setLocations(
+        dataLocation.locations.map((item: { id: number; name: string }) => ({
+          key: item.id,
+          label: item.name,
+        }))
+      );
     };
     fetchData();
   }, []);
 
-  const onSubmit = () => {
-    onAction();
+  const onSubmit = (data: any) => {
+    onAction({
+      projectId: data.project,
+      locationId: data.location,
+      notes: data.note,
+    });
     onClose();
   };
 
@@ -67,7 +81,7 @@ const StartWorking = ({
             <SelectWithForm
               label="Location"
               name="location"
-              options={[]}
+              options={locations}
               placeholder="Select location"
             />
             <TextAreaWithForm

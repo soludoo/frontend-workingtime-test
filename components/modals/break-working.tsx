@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { useEffect, useState } from "react";
 import SelectWithForm from "../form-hook/select";
 import TextAreaWithForm from "../form-hook/text-area";
 import { Button } from "../ui/button";
@@ -19,12 +21,34 @@ const BreakWorking = ({
 }: {
   open: boolean;
   onClose: () => void;
-  onAction: () => void;
+  onAction: (value: any) => void;
 }) => {
   const form = useForm();
+  const [breakTypes, setBreakTypes] = useState<
+    { key: string; label: string }[]
+  >([]);
 
-  const onSubmit = () => {
-    onAction();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/break-types");
+      const { data } = await response.json();
+      setBreakTypes(
+        data.breakTypes.map((item: { id: number; name: string }) => ({
+          key: item.id,
+          label: item.name,
+        }))
+      );
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit = (data: any) => {
+    onAction({
+      breakType: breakTypes?.find((item: any) => item?.id === data.break_type)
+        ?.label,
+      breakTypeId: data.break_type,
+      notes: data.note,
+    });
     onClose();
   };
 
@@ -45,7 +69,7 @@ const BreakWorking = ({
             <SelectWithForm
               label="Break Type"
               name="break_type"
-              options={[]}
+              options={breakTypes}
               placeholder="Select break type"
             />
             <TextAreaWithForm

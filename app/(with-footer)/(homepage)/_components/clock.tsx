@@ -28,12 +28,12 @@ const ClockContent = () => {
       <StartWorking
         open={isModalStart}
         onClose={() => setIsModalStart(false)}
-        onAction={start}
+        onAction={(value) => start(value)}
       />
       <BreakWorking
         open={isModalBreak}
         onClose={() => setIsModalBreak(false)}
-        onAction={pause}
+        onAction={(value) => pause(value)}
       />
       {!data.stoppedToday && (
         <div className="flex flex-col gap-y-2.5 items-center">

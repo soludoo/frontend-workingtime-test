@@ -33,12 +33,13 @@ export const useWorkTracker = () => {
     return () => clearInterval(interval);
   }, [fetchData]);
 
-  const start = async () => {
+  const start = async (value: any) => {
     try {
       const res = await fetch(`/api/timer/start`, {
         method: "POST",
         body: JSON.stringify({
           force: true,
+          ...value,
         }),
       });
       const response = await res.json();
@@ -52,11 +53,13 @@ export const useWorkTracker = () => {
     }
   };
 
-  const pause = async () => {
+  const pause = async (value: any) => {
     try {
       const res = await fetch(`/api/timer/pause`, {
         method: "POST",
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          ...value,
+        }),
       });
       const response = await res.json();
       if (!res.ok) {
