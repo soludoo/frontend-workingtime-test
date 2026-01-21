@@ -36,7 +36,7 @@ const BreakWorking = ({
         data.breakTypes.map((item: { id: number; name: string }) => ({
           key: item.id,
           label: item.name,
-        }))
+        })),
       );
     };
     fetchData();
@@ -50,6 +50,7 @@ const BreakWorking = ({
       notes: data.note,
     });
     onClose();
+    form.reset();
   };
 
   return (

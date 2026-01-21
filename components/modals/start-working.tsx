@@ -35,7 +35,7 @@ const StartWorking = ({
         data.projects.map((item: { id: number; name: string }) => ({
           key: item.id,
           label: item.name,
-        }))
+        })),
       );
       const response = await fetch("/api/locations");
       const { data: dataLocation } = await response.json();
@@ -43,7 +43,7 @@ const StartWorking = ({
         dataLocation.locations.map((item: { id: number; name: string }) => ({
           key: item.id,
           label: item.name,
-        }))
+        })),
       );
     };
     fetchData();
@@ -55,6 +55,7 @@ const StartWorking = ({
       locationId: data.location,
       notes: data.note,
     });
+    form.reset();
     onClose();
   };
 

@@ -4,6 +4,8 @@ import "./globals.css";
 import PrimaryColorProvider from "@/components/theme/primary-color-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Spinner } from "@/components/ui/spinner";
+import React from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +27,9 @@ export default function RootLayout({
         className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a] max-h-screen overflow-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <React.Suspense fallback={<Spinner className="size-6" />}>
+            {children}
+          </React.Suspense>
           <PrimaryColorProvider />
           <Toaster richColors position="top-center" />
         </ThemeProvider>

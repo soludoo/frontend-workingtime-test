@@ -7,6 +7,7 @@ const BackAdmin = () => {
   return (
     <button
       onClick={() => router.back()}
+      type="button"
       className="flex items-center gap-2 text-black text-sm"
     >
       <ChevronLeft className="size-5" />
