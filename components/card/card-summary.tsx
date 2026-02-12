@@ -49,7 +49,7 @@ const CardSummary = ({
     >
       {icons}
       <div className={cn("flex flex-col", classNameWrapper)}>
-        <h4 className="font-medium text-black">{time}</h4>
+        <h4 className="font-medium text-black text-sm">{time}</h4>
         <p className={cn("text-body text-[10px]", medium && "text-sm")}>
           {title}
         </p>

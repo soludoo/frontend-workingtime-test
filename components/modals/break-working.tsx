@@ -33,7 +33,7 @@ const BreakWorking = ({
       const response = await fetch("/api/break-types");
       const { data } = await response.json();
       setBreakTypes(
-        data.breakTypes.map((item: { id: number; name: string }) => ({
+        data.break_types.map((item: { id: number; name: string }) => ({
           key: item.id,
           label: item.name,
         })),

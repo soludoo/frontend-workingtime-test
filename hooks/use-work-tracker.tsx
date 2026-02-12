@@ -74,7 +74,7 @@ export const useWorkTracker = () => {
 
   const resume = async () => {
     try {
-      const res = await fetch(`/api/timer/pause`, {
+      const res = await fetch(`/api/timer/resume`, {
         method: "POST",
         body: JSON.stringify({}),
       });

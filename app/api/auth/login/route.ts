@@ -14,8 +14,8 @@ export async function POST(req: Request) {
 
   if (!res.ok || !result?.data?.token) {
     return NextResponse.json(
-      { success: false, message: "Login failed" },
-      { status: 401 }
+      { success: false, message: result?.message || "Login failed" },
+      { status: 401 },
     );
   }
 

@@ -13,7 +13,7 @@ const PageTitleBack = ({
 }) => {
   const router = useRouter();
   return (
-    <div className={cn("h-[52px] px-5 flex items-center", className)}>
+    <div className={cn("min-h-[52px] px-5 flex items-center", className)}>
       <button onClick={() => router.back()}>
         <ChevronLeft className="size-6" />
       </button>

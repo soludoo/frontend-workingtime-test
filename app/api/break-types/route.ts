@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   if (!res.ok) {
     return NextResponse.json(
       { success: false, message: result.message || "Unauthorize" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 

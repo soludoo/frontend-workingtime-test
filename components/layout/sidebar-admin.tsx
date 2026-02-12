@@ -35,7 +35,7 @@ const SidebarAdmin = () => {
       <h3 className="text-body text-xs font-medium">MAIN FEATURES</h3>
       <ul className="flex flex-col gap-1 px-2">
         {ADMINNAVIGATIONS.map((item) => {
-          const isActive = pathname.includes(item.href);
+          const isActive = pathname.includes(item.href) && !item.children;
           const isOpen = openMenus[item.name];
 
           return (
