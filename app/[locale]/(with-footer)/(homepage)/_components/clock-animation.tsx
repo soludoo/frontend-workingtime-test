@@ -4,7 +4,7 @@ const ClockAnimation = () => {
       {/* Outer ring */}
       <div
         className="absolute inset-0 rounded-full 
-        bg-gradient-to-br from-gray-200 to-gray-300
+        bg-linear-to-br from-gray-200 to-gray-300
         dark:from-gray-700 dark:to-gray-800
         shadow-inner
         animate-[clock-breathe_3s_ease-in-out_infinite]"
@@ -13,7 +13,7 @@ const ClockAnimation = () => {
       {/* Middle ring */}
       <div
         className="absolute size-[190px] rounded-full
-        bg-gradient-to-br from-gray-300 to-gray-400
+        bg-linear-to-br from-gray-300 to-gray-400
         dark:from-gray-600 dark:to-gray-700
         shadow-inner
         animate-[clock-breathe_3s_ease-in-out_infinite_0.15s]"
@@ -22,7 +22,7 @@ const ClockAnimation = () => {
       {/* Inner face */}
       <div
         className="relative size-[150px] rounded-full
-        bg-gradient-to-br from-gray-100 to-gray-300
+        bg-linear-to-br from-gray-100 to-gray-300
         dark:from-gray-500 dark:to-gray-600
         shadow-[inset_0_2px_6px_rgba(0,0,0,0.15)]
         flex items-center justify-center"
@@ -40,7 +40,7 @@ const ClockAnimation = () => {
 
         {/* Second hand */}
         <div
-          className="absolute bottom-1/2 w-[2px] h-[46%]
+          className="absolute bottom-1/2 w-0.5 h-[46%]
           bg-gray-700 dark:bg-black
           origin-bottom rounded-full
           animate-[spin_1.2s_linear_infinite]"
