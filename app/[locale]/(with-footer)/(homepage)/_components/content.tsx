@@ -7,14 +7,13 @@ import { useWorkTracker } from "@/hooks/use-work-tracker";
 import { useEffect, useState } from "react";
 
 const Content = () => {
-  const { data } = useWorkTracker();
+  const { data, start, pause, resume, stop } = useWorkTracker();
   const [summary, setSummary] = useState(undefined);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`/api/timer/work-summary`);
       const { data } = await res.json();
-      console.log(data);
       setSummary(data);
     };
 
@@ -28,7 +27,13 @@ const Content = () => {
   return (
     <div className="flex flex-col gap-6">
       <Header summary={summary} />
-      <ClockContent />
+      <ClockContent
+        data={data}
+        start={start}
+        pause={pause}
+        resume={resume}
+        stop={stop}
+      />
       <WorkSummary summary={summary} data={data} />
     </div>
   );

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import EndOfWork from "@/components/modals/end-of-work";
 import ClockButton from "@/components/ui/clock-button";
-import { useWorkTracker } from "@/hooks/use-work-tracker";
 import { CircleX, FileChartColumn, Pause, Play, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import ClockAnimation from "./clock-animation";
@@ -9,14 +9,11 @@ import StartWorking from "@/components/modals/start-working";
 import BreakWorking from "@/components/modals/break-working";
 import { useTranslations } from "next-intl";
 
-const ClockContent = () => {
-  const { data, start, pause, resume, stop } = useWorkTracker();
+const ClockContent = ({ data, start, pause, resume, stop }: any) => {
   const [isModal, setIsModal] = useState(false);
   const [isModalStart, setIsModalStart] = useState(false);
   const [isModalBreak, setIsModalBreak] = useState(false);
   const t = useTranslations("home");
-
-  console.log(data);
 
   if (!data) {
     return <ClockAnimation />;
@@ -77,7 +74,7 @@ const ClockContent = () => {
         )}
         {data.hasActiveTimer &&
           data.status === "running" &&
-          data.break_time_seconds && (
+          data.break_time_seconds !== 0 && (
             <>
               <ClockButton
                 color="red"

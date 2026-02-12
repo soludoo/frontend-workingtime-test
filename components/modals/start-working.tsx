@@ -46,8 +46,10 @@ const StartWorking = ({
         })),
       );
     };
-    fetchData();
-  }, []);
+    if (open) {
+      fetchData();
+    }
+  }, [open]);
 
   const onSubmit = (data: any) => {
     onAction({
