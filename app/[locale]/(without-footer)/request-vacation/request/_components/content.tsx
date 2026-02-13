@@ -14,12 +14,11 @@ const Content = () => {
       const res = await fetch("/api/leave/type");
       const { data } = await res.json();
       setOptions(
-        data.leave_types.map((item: { id: string; name: string }) => ({
+        data.leaveTypes.map((item: { id: string; name: string }) => ({
           key: item.id,
           label: item.name,
-        }))
+        })),
       );
-      console.log(data);
     };
     fetchData();
   }, []);

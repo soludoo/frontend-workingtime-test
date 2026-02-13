@@ -37,7 +37,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
         onAction={(value) => pause(value)}
       />
       <div className="flex flex-col gap-y-2.5 items-center">
-        {!data?.hasActiveTimer && (
+        {!data?.hasActiveTimer && data.status !== "stopped" && (
           <>
             <ClockButton
               color="green"
@@ -90,7 +90,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             </>
           )}
       </div>
-      {/* {data.stoppedToday && (
+      {!data.hasActiveTimer && data.status === "stopped" && (
         <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
           <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
             <FileChartColumn className="text-white size-6" />
@@ -102,13 +102,13 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             <p className="text-sm text-body">
               You worked{" "}
               <span className="text-black font-semibold">
-                {data.workSummary.totalWorked}
+                {data?.work_duration}
               </span>{" "}
               today.
             </p>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };

@@ -4,23 +4,31 @@ import { Palmtree, Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CardLeave from "./card-leave";
+import { Spinner } from "@/components/ui/spinner";
 
 const Past = () => {
   const [data, setData] = useState<any>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const res = await fetch("/api/leave/past");
       const { data } = await res.json();
-      setData(data?.requests || undefined);
+      setData(data?.leaveRequests || undefined);
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return <Spinner className="size-6 mx-auto my-10" />;
+  }
+
   return (
     <div className="flex flex-col justify-between h-full py-5">
-      {!data ? (
+      {!data || data.length === 0 ? (
         <div className="flex-1 min-h-[400px] flex items-center justify-center flex-col gap-3">
           <div className="size-[60px] bg-primary/10 flex items-center justify-center rounded-full">
             <Palmtree className="size-[30px] text-primary" />
@@ -41,9 +49,9 @@ const Past = () => {
               key={index}
               status={item.status}
               title={item.reason}
-              date={item.date_display}
+              startDate={item.startDate}
+              endDate={item.endDate}
               type={item.leave_type_name}
-              color={item.status_color}
             />
           ))}
         </div>
