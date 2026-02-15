@@ -10,13 +10,6 @@ const PersonalInformation = ({ user }: { user: any }) => {
 
   return (
     <div className="p-4 flex flex-col gap-4 border border-border rounded-2xl">
-      <div className="flex items-center justify-between">
-        <p className="text-black text-sm">Email Address</p>
-        <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">{user.email}</p>
-        </div>
-      </div>
-      <div className="border-b border-border w-full" />
       <button
         onClick={() =>
           router.push(`/settings/personal-information/edit/full-name`)

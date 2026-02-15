@@ -1,12 +1,7 @@
 "use client";
 import React from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
-import {
-  ChevronRight,
-  ClockPlus,
-  FilePenLine,
-  TicketsPlane,
-} from "lucide-react";
+import { ChevronRight, FilePenLine, TicketsPlane } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const QuickActionsDrawer = ({
@@ -63,29 +58,6 @@ const QuickActionsDrawer = ({
                   Request correction
                 </h3>
                 <p className="text-body text-sm">Fix or edit your time entry</p>
-              </div>
-            </div>
-            <ChevronRight className="size-5" />
-          </button>
-          <div className="w-full h-px bg-border" />
-          <button
-            onClick={() => {
-              router.push("/time-manually");
-              onClose();
-            }}
-            className="flex items-center justify-between w-full"
-          >
-            <div className="flex items-center gap-3">
-              <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ClockPlus className="size-5 text-primary" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="text-black font-medium text-sm text-start">
-                  Add time manually
-                </h3>
-                <p className="text-body text-sm">
-                  Add missing hours to your timeline.
-                </p>
               </div>
             </div>
             <ChevronRight className="size-5" />

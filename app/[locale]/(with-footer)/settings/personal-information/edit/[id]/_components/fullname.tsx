@@ -23,10 +23,12 @@ const FullName = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`/api/settings/profile`);
-      const { data } = await res.json();
+      const {
+        data: { user },
+      } = await res.json();
       form.reset({
-        first_name: data?.firstName || "",
-        last_name: data?.lastName || "",
+        first_name: user?.first_name || "",
+        last_name: user?.last_name || "",
       });
     };
     fetchData();

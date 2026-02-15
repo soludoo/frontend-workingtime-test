@@ -7,15 +7,15 @@ import History from "./history";
 const Content = () => {
   const [tab, setTab] = useState("active-request");
   return (
-    <div className="flex flex-col h-full pb-5">
-      <div className="flex">
+    <>
+      <div className="flex h-10">
         <button
           onClick={() => setTab("active-request")}
           className={cn(
             "flex-1 flex items-center justify-center font-medium h-10 border-b text-sm",
             tab === "active-request"
               ? "border-primary text-primary"
-              : "border-border text-body"
+              : "border-border text-body",
           )}
         >
           Active requests
@@ -25,7 +25,7 @@ const Content = () => {
             "flex-1 flex items-center justify-center font-medium h-10 border-b text-sm",
             tab === "history"
               ? "border-primary text-primary"
-              : "border-border text-body"
+              : "border-border text-body",
           )}
           onClick={() => setTab("history")}
         >
@@ -34,7 +34,7 @@ const Content = () => {
       </div>
       {tab === "active-request" && <ActiveRequest />}
       {tab === "history" && <History />}
-    </div>
+    </>
   );
 };
 

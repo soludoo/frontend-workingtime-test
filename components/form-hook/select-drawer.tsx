@@ -16,9 +16,10 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { Separator } from "../ui/separator";
 
 type Option = {
   key: string | number;
@@ -53,7 +54,7 @@ const SelectDrawerWithForm = ({
       name={name}
       render={({ field }) => {
         const selected = options.find(
-          (opt) => String(opt.key) === String(field.value)
+          (opt) => String(opt.key) === String(field.value),
         );
 
         return (
@@ -77,7 +78,7 @@ const SelectDrawerWithForm = ({
                     className={cn(
                       "w-full justify-between text-black text-sm font-medium border-primary rounded-2xl hover:bg-transparent hover:text-black",
                       !field.value && "text-muted-foreground",
-                      className
+                      className,
                     )}
                   >
                     <div className="flex w-full items-center gap-3 justify-between">
@@ -100,27 +101,32 @@ const SelectDrawerWithForm = ({
                 <DrawerHeader>
                   <DrawerTitle>{label}</DrawerTitle>
                 </DrawerHeader>
-                <div className="flex flex-col gap-1 mt-4">
-                  {options.map((item) => {
+                <div className="flex flex-col gap-1 mt-4  overflow-auto">
+                  {options.map((item, index) => {
                     const isSelected = String(field.value) === String(item.key);
+                    const isLast = index === options.length - 1;
+
                     return (
-                      <button
-                        key={item.key}
-                        type="button"
-                        onClick={() => {
-                          field.onChange(String(item.key));
-                          setOpen(false);
-                        }}
-                        className={cn(
-                          "flex items-center justify-between rounded-xl px-4 py-3 text-left transition",
-                          isSelected
-                            ? "bg-primary/10 text-primary"
-                            : "hover:bg-muted"
-                        )}
-                      >
-                        <span>{item.label}</span>
-                        {isSelected && <Check className="h-4 w-4" />}
-                      </button>
+                      <div key={item.key} className="flex flex-col gap-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            field.onChange(String(item.key));
+                            setOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center justify-between rounded-xl px-4 py-3 text-left transition w-full",
+                            isSelected
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-muted",
+                          )}
+                        >
+                          <span>{item.label}</span>
+                          {isSelected && <Check className="h-4 w-4" />}
+                        </button>
+
+                        {!isLast && <Separator />}
+                      </div>
                     );
                   })}
                 </div>

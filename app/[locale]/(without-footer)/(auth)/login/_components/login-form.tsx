@@ -18,7 +18,7 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "shivambarnwal8819@gmail.com",
-      password: "7db66UPQ",
+      password: "newpass1shivam123",
     },
   });
   const router = useRouter();

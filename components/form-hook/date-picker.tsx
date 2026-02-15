@@ -56,9 +56,9 @@ const DatePickerWithForm = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-between font-normal rounded-2xl border border-primary",
+                    "w-full justify-between font-normal rounded-2xl border border-primary hover:bg-transparent hover:text-black",
                     !field.value && "text-body text-sm",
-                    className
+                    className,
                   )}
                   disabled={disabled}
                 >

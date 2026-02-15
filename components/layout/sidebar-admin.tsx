@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { ADMINNAVIGATIONS } from "@/constants/navigations";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { routing } from "@/i18n/routing";
 
 const SidebarAdmin = () => {
   const pathname = usePathname();
@@ -35,7 +37,16 @@ const SidebarAdmin = () => {
       <h3 className="text-body text-xs font-medium">MAIN FEATURES</h3>
       <ul className="flex flex-col gap-1 px-2">
         {ADMINNAVIGATIONS.map((item) => {
-          const isActive = pathname.includes(item.href) && !item.children;
+          const LOCALES = routing.locales;
+          function stripLocale(pathname: string) {
+            const segments = pathname.split("/");
+            if (LOCALES.includes(segments[1] as any)) {
+              return "/" + segments.slice(2).join("/");
+            }
+            return pathname;
+          }
+          const cleanPath = stripLocale(pathname);
+          const isActive = cleanPath.includes(item.href) && !item.children;
           const isOpen = openMenus[item.name];
 
           return (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { FileClock, Plus, Settings } from "lucide-react";
 import Link from "next/link";
@@ -6,10 +7,21 @@ import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import QuickActionsDrawer from "../modals/quick-actions";
+import { routing } from "@/i18n/routing";
 
 const Footer = () => {
   const pathname = usePathname();
   const [isDrawer, setIsDrawer] = React.useState(false);
+  const LOCALES = routing.locales;
+  function stripLocale(pathname: string) {
+    const segments = pathname.split("/");
+    if (LOCALES.includes(segments[1] as any)) {
+      return "/" + segments.slice(2).join("/");
+    }
+    return pathname;
+  }
+  const cleanPath = stripLocale(pathname);
+
   return (
     <>
       <QuickActionsDrawer open={isDrawer} onClose={() => setIsDrawer(false)} />
@@ -19,9 +31,9 @@ const Footer = () => {
             href={"/"}
             className={cn(
               "flex flex-col gap-1 items-center text-xs h-full pt-3",
-              pathname === "/"
+              cleanPath === "/"
                 ? "text-primary border-t-2 border-primary dark:border-black dark:text-black"
-                : "text-body"
+                : "text-body",
             )}
           >
             <FileClock className="min-w-6 min-h-6 size-6" />
@@ -40,7 +52,7 @@ const Footer = () => {
               "flex flex-col gap-1 items-center text-xs h-full pt-3",
               pathname.includes("/settings")
                 ? "text-primary border-t-2 border-primary dark:border-black dark:text-black"
-                : "text-body"
+                : "text-body",
             )}
           >
             <Settings className="min-w-6 min-h-6 size-6" />

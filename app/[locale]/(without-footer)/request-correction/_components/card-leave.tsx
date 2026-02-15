@@ -7,13 +7,11 @@ const CardLeave = ({
   title,
   type,
   date,
-  color,
 }: {
   status: string;
   title: string;
   type: string;
   date: string;
-  color: string;
 }) => {
   return (
     <div className="border border-border rounded-[12px] p-4 flex justify-between gap-3">
@@ -25,9 +23,10 @@ const CardLeave = ({
       <Badge
         className={cn(
           "font-medium text-xs",
-          status === "pending" ? "text-black" : ""
+          status === "pending" && "text-black bg-yellow",
+          status === "approve" && "text-white bg-green",
+          status === "rejected" && "text-white bg-red",
         )}
-        style={{ background: color }}
       >
         {capitalizeFirstLetter(status)}
       </Badge>

@@ -15,6 +15,8 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
   const [isModalBreak, setIsModalBreak] = useState(false);
   const t = useTranslations("home");
 
+  console.log(data);
+
   if (!data) {
     return <ClockAnimation />;
   }
@@ -50,7 +52,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
         )}
         {data.hasActiveTimer &&
           data.status === "running" &&
-          !data.break_time_seconds && (
+          data.breaks.length === 0 && (
             <>
               <ClockButton
                 color="yellow"
@@ -74,7 +76,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
         )}
         {data.hasActiveTimer &&
           data.status === "running" &&
-          data.break_time_seconds !== 0 && (
+          data.breaks.length > 0 && (
             <>
               <ClockButton
                 color="red"

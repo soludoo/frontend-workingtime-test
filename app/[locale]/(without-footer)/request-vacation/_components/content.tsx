@@ -7,15 +7,15 @@ import Past from "./past";
 const Content = () => {
   const [tab, setTab] = useState("current");
   return (
-    <div className="flex flex-col h-full pb-5">
-      <div className="flex">
+    <>
+      <div className="flex h-10">
         <button
           onClick={() => setTab("current")}
           className={cn(
             "flex-1 flex items-center justify-center font-medium h-10 border-b text-sm",
             tab === "current"
               ? "border-primary text-primary"
-              : "border-border text-body"
+              : "border-border text-body",
           )}
         >
           Current
@@ -25,7 +25,7 @@ const Content = () => {
             "flex-1 flex items-center justify-center font-medium h-10 border-b text-sm",
             tab === "past"
               ? "border-primary text-primary"
-              : "border-border text-body"
+              : "border-border text-body",
           )}
           onClick={() => setTab("past")}
         >
@@ -34,7 +34,7 @@ const Content = () => {
       </div>
       {tab === "current" && <Current />}
       {tab === "past" && <Past />}
-    </div>
+    </>
   );
 };
 
