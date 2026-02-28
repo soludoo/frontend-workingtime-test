@@ -6,7 +6,7 @@ export async function PUT(req: NextRequest) {
   if (!token) {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -16,23 +16,20 @@ export async function PUT(req: NextRequest) {
   if (!phone) {
     return NextResponse.json(
       { success: false, message: "phone is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/me/profile/phone`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        phone,
-      }),
-    }
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      phone,
+    }),
+  });
 
   const result = await res.json();
 
@@ -42,7 +39,7 @@ export async function PUT(req: NextRequest) {
         success: false,
         message: result.message || "Failed to update name",
       },
-      { status: res.status }
+      { status: res.status },
     );
   }
 

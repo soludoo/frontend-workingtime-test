@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -40,7 +39,8 @@ const DeleteAccountModal = ({
           <Button className="flex-1 text-sm bg-red">Delete Account</Button>
           <Button
             onClick={onClose}
-            className="flex-1 text-sm bg-transparent text-black border border-border"
+            variant={"outline"}
+            className="flex-1 text-sm"
           >
             Cancel
           </Button>

@@ -22,7 +22,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PhoneInputWithForm = ({
   name,
@@ -51,8 +51,19 @@ const PhoneInputWithForm = ({
   const form = useFormContext();
   const [open, setOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState(
-    PHONECODE.find((code) => code.code == "US")
+    PHONECODE.find((code) => code.code == "US"),
   );
+
+  useEffect(() => {
+    if (form.watch(name)) {
+      setSelectedCode(
+        PHONECODE.find((code) =>
+          form.watch(name)?.startsWith(code.dial_code) ? code : null,
+        ) || PHONECODE[0],
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch(name)]);
 
   const splitPhoneValue = (value?: string) => {
     if (!value) return { dialCode: "", number: "" };
@@ -91,7 +102,7 @@ const PhoneInputWithForm = ({
                   value={number}
                   onChange={(e) => {
                     field.onChange(
-                      `${selectedCode?.dial_code} ${e.target.value}`
+                      `${selectedCode?.dial_code} ${e.target.value}`,
                     );
                   }}
                   autoComplete="off"
@@ -126,10 +137,10 @@ const PhoneInputWithForm = ({
                             setSelectedCode(code);
                             const currentNumber = field.value?.replace(
                               /^[+]\d+\s?/,
-                              ""
+                              "",
                             );
                             field.onChange(
-                              `${code.dial_code} ${currentNumber}`
+                              `${code.dial_code} ${currentNumber}`,
                             );
                             setOpen(false);
                           }}

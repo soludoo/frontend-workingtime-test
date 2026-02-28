@@ -69,7 +69,7 @@ const SelectWithForm = ({
                 disabled={disabled}
                 className={cn(
                   "w-full font-medium border-primary rounded-2xl",
-                  className
+                  className,
                 )}
               >
                 <div className="flex items-center gap-3">

@@ -2,23 +2,41 @@
 import PasswordInputWithForm from "@/components/form-hook/password";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import z from "zod";
 
-type FormValues = {
-  currentPassword: string;
-  newPassword: string;
-};
+const passwordRules = z
+  .string()
+  .min(6, "Password must be at least 6 characters");
+
+export const passwordSchema = z
+  .object({
+    current_password: passwordRules,
+    new_password: passwordRules,
+    confirm_password: passwordRules,
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords do not match",
+  });
+
+export type FormValues = z.infer<typeof passwordSchema>;
 
 const Password = () => {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<FormValues>({
+    resolver: zodResolver(passwordSchema),
     defaultValues: {
-      currentPassword: "",
-      newPassword: "",
+      current_password: "",
+      new_password: "",
+      confirm_password: "",
     },
   });
+  const router = useRouter();
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -29,8 +47,9 @@ const Password = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          currentPassword: data.currentPassword.trim(),
-          newPassword: data.newPassword.trim(),
+          current_password: data.current_password.trim(),
+          new_password: data.new_password.trim(),
+          confirm_password: data.confirm_password.trim(),
         }),
       });
       const result = await res.json();
@@ -38,10 +57,13 @@ const Password = () => {
         throw new Error(result.message || "Failed to update profile");
       }
       form.reset({
-        currentPassword: data.currentPassword.trim(),
-        newPassword: result.data?.user?.newPassword ?? data.newPassword,
+        current_password: data.current_password.trim(),
+        new_password: result.data?.user?.new_password ?? data.new_password,
+        confirm_password:
+          result.data?.user?.confirm_password ?? data.confirm_password,
       });
-      toast.success(result.message);
+      toast.success("Password updated successfully. Please log in again.");
+      router.push("/login");
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
@@ -58,12 +80,19 @@ const Password = () => {
       >
         <div className="flex flex-col gap-5">
           <PasswordInputWithForm
-            name={"currentPassword"}
+            name={"current_password"}
             label={"Enter Password"}
+            placeholder="******"
           />
           <PasswordInputWithForm
-            name={"newPassword"}
+            name={"new_password"}
             label={"Enter new password"}
+            placeholder="******"
+          />
+          <PasswordInputWithForm
+            name={"confirm_password"}
+            label={"Confirm new password"}
+            placeholder="******"
           />
         </div>
         <Button disabled={isLoading}>

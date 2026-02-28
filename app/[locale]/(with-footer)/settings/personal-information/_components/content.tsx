@@ -29,7 +29,7 @@ const Content = () => {
     <section className="flex flex-col h-full">
       <PageTitleBack title="Personal Information" />
       <div className="py-5 flex flex-col gap-5 px-5">
-        <Picture />
+        <Picture url={data.profile_photo} />
         <PersonalInformation user={data} />
         <Role user={data} />
         <DeleteAccount />

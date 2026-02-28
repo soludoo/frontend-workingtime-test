@@ -9,18 +9,10 @@ const passwordRules = z
 
 export const registerSchema = z
   .object({
-    full_name: z.string().min(3, "Full name must be at least 3 characters"),
-    email: z.string().email("Invalid email address"),
-
-    password: passwordRules,
+    new_password: passwordRules,
     confirm_password: passwordRules,
-
-    phone_number: z
-      .string()
-      .min(8, "Phone number must be at least 8 digits")
-      .max(16, "Phone number too long"),
   })
-  .refine((data) => data.password === data.confirm_password, {
+  .refine((data) => data.new_password === data.confirm_password, {
     path: ["confirm_password"],
     message: "Passwords do not match",
   });

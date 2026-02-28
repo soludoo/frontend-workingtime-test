@@ -15,8 +15,6 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
   const [isModalBreak, setIsModalBreak] = useState(false);
   const t = useTranslations("home");
 
-  console.log(data);
-
   if (!data) {
     return <ClockAnimation />;
   }

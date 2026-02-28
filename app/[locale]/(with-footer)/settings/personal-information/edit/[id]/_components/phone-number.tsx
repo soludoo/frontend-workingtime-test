@@ -2,6 +2,7 @@
 import PhoneInputWithForm from "@/components/form-hook/phone";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,6 +18,7 @@ const PhoneNumber = () => {
       phone: "",
     },
   });
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +54,7 @@ const PhoneNumber = () => {
         phone: data.phone.trim(),
       });
       toast.success(result.message);
+      router.push("/settings/personal-information");
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);

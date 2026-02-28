@@ -63,7 +63,10 @@ const Content = () => {
         throw new Error(result.message || "Failed to update profile");
       }
       form.reset({});
-      toast.success(result.message);
+      toast.success(
+        result.message ||
+          "Your request has been submitted and is waiting for approval.",
+      );
       router.push("/request-vacation");
     } catch (error: any) {
       console.error(error);

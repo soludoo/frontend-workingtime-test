@@ -11,7 +11,10 @@ const Header = ({ summary }: any) => {
     <div className="flex items-center justify-between gap-10">
       <div className="flex items-center gap-3">
         <Avatar className="size-10">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage
+            src={summary?.user?.profile_photo}
+            alt={summary?.user?.name || "Profile Picture"}
+          />
         </Avatar>
         <div className="flex flex-col gap-y-2">
           <h2 className="text-black text-xl">

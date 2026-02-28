@@ -1,5 +1,4 @@
 import PageTitle from "@/components/share/page-title";
-import React from "react";
 import ProfilePictures from "./_components/profile-picture";
 import Sections from "./_components/sections";
 

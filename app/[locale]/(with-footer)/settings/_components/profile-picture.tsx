@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const ProfilePictures = () => {
   const [data, setData] = useState<any>(undefined);
@@ -30,7 +30,10 @@ const ProfilePictures = () => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center">
       <Avatar className="size-20">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage
+          src={data?.profile_photo}
+          alt={data?.full_name || "Profile Picture"}
+        />
       </Avatar>
       <div className="flex flex-col gap-1 items-center justify-center">
         <h1 className="text-black text-xl font-semibold text-center">
