@@ -4,7 +4,7 @@ import InputWithForm from "@/components/form-hook/input";
 import PasswordInputWithForm from "@/components/form-hook/password";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { loginSchema, LoginSchema } from "./login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const search = useSearchParams();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -40,7 +41,11 @@ const LoginForm = () => {
         toast.error(result.message || "Login failed");
         return;
       }
-      router.push("/");
+      if (search.get("changePassword")) {
+        router.push("/password");
+      } else {
+        router.push("/");
+      }
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || "Something went wrong!!");
