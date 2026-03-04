@@ -19,6 +19,10 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
     return <ClockAnimation />;
   }
 
+  const isNotToday =
+    data?.timer?.date &&
+    new Date(data.timer.date).toDateString() !== new Date().toDateString();
+
   return (
     <>
       <EndOfWork
@@ -38,6 +42,17 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
       />
       <div className="flex flex-col gap-y-2.5 items-center">
         {!data?.hasActiveTimer && data.status !== "stopped" && (
+          <>
+            <ClockButton
+              color="green"
+              title="Start"
+              icon={<Play className="size-6" />}
+              onClick={() => setIsModalStart(true)}
+            />
+            <p className="italic text-sm">{t("start-title")}</p>
+          </>
+        )}
+        {data.status === "stopped" && isNotToday && (
           <>
             <ClockButton
               color="green"
@@ -90,7 +105,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             </>
           )}
       </div>
-      {!data.hasActiveTimer && data.status === "stopped" && (
+      {!data.hasActiveTimer && data.status === "stopped" && !isNotToday && (
         <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
           <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
             <FileChartColumn className="text-white size-6" />

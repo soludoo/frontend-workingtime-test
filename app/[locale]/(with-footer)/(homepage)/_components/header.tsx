@@ -23,7 +23,7 @@ const Header = ({ summary }: any) => {
           <p className="text-body text-sm">{getTodayDate()}</p>
         </div>
       </div>
-      <Link href={"/notifications"}>
+      {/* <Link href={"/notifications"}>
         <Button
           variant={"rounded"}
           size={"icon-lg"}
@@ -31,7 +31,7 @@ const Header = ({ summary }: any) => {
         >
           <Bell className="text-black size-6" />
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 };
