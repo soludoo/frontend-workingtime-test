@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <HeaderAdmin />
       <div className="flex">
         <SidebarAdmin />
-        <div className="flex-1 h-full p-8 max-h-[calc(100vh-76px)] overflow-auto">
+        <div className="flex-1 h-full p-8 max-h-[calc(100dvh-76px)] overflow-auto">
           {children}
         </div>
       </div>

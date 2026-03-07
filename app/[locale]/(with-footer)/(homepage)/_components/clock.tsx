@@ -106,22 +106,31 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
           )}
       </div>
       {!data.hasActiveTimer && data.status === "stopped" && !isNotToday && (
-        <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
-          <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
-            <FileChartColumn className="text-white size-6" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <h2 className="text-black font-medium">
-              Your workday is completed.
-            </h2>
-            <p className="text-sm text-body">
-              You worked{" "}
-              <span className="text-black font-semibold">
-                {data?.work_duration}
-              </span>{" "}
-              today.
-            </p>
-          </div>
+        // <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
+        //   <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
+        //     <FileChartColumn className="text-white size-6" />
+        //   </div>
+        //   <div className="flex flex-col gap-1">
+        //     <h2 className="text-black font-medium">
+        //       Your workday is completed.
+        //     </h2>
+        //     <p className="text-sm text-body">
+        //       You worked{" "}
+        //       <span className="text-black font-semibold">
+        //         {data?.work_duration}
+        //       </span>{" "}
+        //       today.
+        //     </p>
+        //   </div>
+        // </div>
+        <div className="flex flex-col gap-y-2.5 items-center">
+          <ClockButton
+            color="green"
+            title="Start"
+            icon={<Play className="size-6" />}
+            onClick={() => setIsModalStart(true)}
+          />
+          <p className="italic text-sm">{t("start-title")}</p>
         </div>
       )}
     </>

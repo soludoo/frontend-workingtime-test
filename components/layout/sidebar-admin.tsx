@@ -33,7 +33,7 @@ const SidebarAdmin = () => {
   };
 
   return (
-    <aside className="relative z-10 bg-white max-h-[calc(100vh-76px)] h-[calc(100vh-76px)] overflow-auto border-r border-border max-w-[300px] w-full py-8 px-2.5 flex flex-col gap-3">
+    <aside className="relative z-10 bg-white max-h-[calc(100dvh-76px)] h-[calc(100dvh-76px)] overflow-auto border-r border-border max-w-[300px] w-full py-8 px-2.5 flex flex-col gap-3">
       <h3 className="text-body text-xs font-medium">MAIN FEATURES</h3>
       <ul className="flex flex-col gap-1 px-2">
         {ADMINNAVIGATIONS.map((item) => {
