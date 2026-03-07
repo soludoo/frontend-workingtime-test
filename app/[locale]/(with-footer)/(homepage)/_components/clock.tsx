@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import EndOfWork from "@/components/modals/end-of-work";
 import ClockButton from "@/components/ui/clock-button";
 import { CircleX, FileChartColumn, Pause, Play, RefreshCw } from "lucide-react";
@@ -8,6 +9,7 @@ import ClockAnimation from "./clock-animation";
 import StartWorking from "@/components/modals/start-working";
 import BreakWorking from "@/components/modals/break-working";
 import { useTranslations } from "next-intl";
+import { calculateWorkDuration } from "@/lib/helper";
 
 const ClockContent = ({ data, start, pause, resume, stop }: any) => {
   const [isModal, setIsModal] = useState(false);
@@ -19,26 +21,33 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
     return <ClockAnimation />;
   }
 
-  const isNotToday =
-    data?.timer?.date &&
-    new Date(data.timer.date).toDateString() !== new Date().toDateString();
+  console.log(data);
 
   return (
     <>
       <EndOfWork
         open={isModal}
         onClose={() => setIsModal(false)}
-        onSelect={stop}
+        onSelect={() => {
+          stop();
+          setIsModal(false);
+        }}
       />
       <StartWorking
         open={isModalStart}
         onClose={() => setIsModalStart(false)}
-        onAction={(value) => start(value)}
+        onAction={(value) => {
+          start(value);
+          setIsModalStart(false);
+        }}
       />
       <BreakWorking
         open={isModalBreak}
         onClose={() => setIsModalBreak(false)}
-        onAction={(value) => pause(value)}
+        onAction={(value) => {
+          pause(value);
+          setIsModalBreak(false);
+        }}
       />
       <div className="flex flex-col gap-y-2.5 items-center">
         {!data?.hasActiveTimer && data.status !== "stopped" && (
@@ -52,16 +61,24 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             <p className="italic text-sm">{t("start-title")}</p>
           </>
         )}
-        {data.status === "stopped" && isNotToday && (
-          <>
-            <ClockButton
-              color="green"
-              title="Start"
-              icon={<Play className="size-6" />}
-              onClick={() => setIsModalStart(true)}
-            />
-            <p className="italic text-sm">{t("start-title")}</p>
-          </>
+        {!data.hasActiveTimer && data.status === "stopped" && (
+          <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
+            <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
+              <FileChartColumn className="text-white size-6" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-black font-medium">
+                Your workday is completed.
+              </h2>
+              <p className="text-sm text-body">
+                You worked{" "}
+                <span className="text-black font-semibold">
+                  {calculateWorkDuration(data)}
+                </span>{" "}
+                today.
+              </p>
+            </div>
+          </div>
         )}
         {data.hasActiveTimer &&
           data.status === "running" &&
@@ -97,42 +114,12 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
                 icon={<CircleX className="size-6" />}
                 onClick={() => setIsModal(true)}
               />
-              {data?.work_duration.includes("8h") && (
-                <p className="italic text-sm">
-                  Worked 8 hours today — awesome job 🎉
-                </p>
+              {calculateWorkDuration(data).includes("8h") && (
+                <p className="italic text-sm">{t("end-work-title")}</p>
               )}
             </>
           )}
       </div>
-      {!data.hasActiveTimer && data.status === "stopped" && !isNotToday && (
-        // <div className="bg-primary/20 w-full rounded-2xl p-4 flex items-center gap-3">
-        //   <div className="bg-primary/80 size-10 flex items-center justify-center rounded-full">
-        //     <FileChartColumn className="text-white size-6" />
-        //   </div>
-        //   <div className="flex flex-col gap-1">
-        //     <h2 className="text-black font-medium">
-        //       Your workday is completed.
-        //     </h2>
-        //     <p className="text-sm text-body">
-        //       You worked{" "}
-        //       <span className="text-black font-semibold">
-        //         {data?.work_duration}
-        //       </span>{" "}
-        //       today.
-        //     </p>
-        //   </div>
-        // </div>
-        <div className="flex flex-col gap-y-2.5 items-center">
-          <ClockButton
-            color="green"
-            title="Start"
-            icon={<Play className="size-6" />}
-            onClick={() => setIsModalStart(true)}
-          />
-          <p className="italic text-sm">{t("start-title")}</p>
-        </div>
-      )}
     </>
   );
 };

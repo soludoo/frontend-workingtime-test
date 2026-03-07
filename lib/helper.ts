@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const formatDuration = (ms: number) => {
   const totalMinutes = Math.floor(ms / 1000 / 60);
   const hours = Math.floor(totalMinutes / 60);
@@ -52,3 +53,28 @@ export const formatLeaveDateRange = (startDate: string, endDate: string) => {
   }
   return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
 };
+
+export function calculateWorkDuration(session: any) {
+  if (!session?.clock_in) return "0h 0m";
+
+  const start = new Date(session.clock_in).getTime();
+
+  let end = Date.now();
+
+  if (session.status === "on_break" && session.breaks?.length) {
+    const lastBreak = session.breaks[session.breaks.length - 1];
+
+    if (lastBreak?.start_time && !lastBreak?.end_time) {
+      end = new Date(lastBreak.start_time).getTime();
+    }
+  }
+
+  const paused = (session.total_paused_seconds || 0) * 1000;
+
+  const totalSeconds = Math.floor((end - start - paused) / 1000);
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  return `${hours}h ${minutes}m`;
+}

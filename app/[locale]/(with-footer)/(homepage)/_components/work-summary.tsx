@@ -1,19 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import CardSummary from "@/components/card/card-summary";
+import { calculateWorkDuration } from "@/lib/helper";
 import { Briefcase, ClipboardClock, TicketsPlane, Weight } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
+  const [worked, setWorked] = useState("0h 0m");
+
+  useEffect(() => {
+    if (!data?.clock_in) return;
+
+    const update = () => {
+      setWorked(calculateWorkDuration(data));
+    };
+
+    update();
+
+    const interval = setInterval(update, 1000);
+
+    return () => clearInterval(interval);
+  }, [data]);
+
   const summaries = useMemo(() => {
     return [
       {
         id: 1,
         title: "Worked",
-        desription: data?.work_duration || "0h 0m",
+        desription: worked,
         icon: (
           <div className="size-10 rounded-full bg-purple-50 flex items-center justify-center">
-            <Briefcase className="size-5 min-w-5 min-h-5 text-purple" />
+            <Briefcase className="size-5 text-purple" />
           </div>
         ),
       },
@@ -23,7 +40,7 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
         desription: `${summary?.weekly_balance?.remaining_hours}h`,
         icon: (
           <div className="size-10 rounded-full bg-blue-50 flex items-center justify-center">
-            <Weight className="size-5 min-w-5 min-h-5 text-blue" />
+            <Weight className="size-5 text-blue" />
           </div>
         ),
       },
@@ -33,7 +50,7 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
         desription: `Left ${summary?.vacation_left?.available}d`,
         icon: (
           <div className="size-10 rounded-full bg-green-50 flex items-center justify-center">
-            <TicketsPlane className="size-5 min-w-5 min-h-5 text-green" />
+            <TicketsPlane className="size-5 text-green" />
           </div>
         ),
       },
@@ -43,12 +60,12 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
         desription: summary?.overtime?.today_overtime_formatted,
         icon: (
           <div className="size-10 rounded-full bg-yellow-50 flex items-center justify-center">
-            <ClipboardClock className="size-5 min-w-5 min-h-5 text-yellow" />
+            <ClipboardClock className="size-5 text-yellow" />
           </div>
         ),
       },
     ];
-  }, [data, summary]);
+  }, [worked, summary]);
 
   return (
     <div className="flex flex-col gap-4">

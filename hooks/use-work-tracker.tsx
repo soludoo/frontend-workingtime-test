@@ -1,110 +1,82 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
+
+import { useEffect, useState } from "react";
+import {
+  startWorking,
+  pauseWorking,
+  resumeWorking,
+  stopWorking,
+  getActiveSession,
+  getTodaySession,
+} from "@/lib/work-session";
 
 export const useWorkTracker = () => {
-  const [data, setData] = useState<any>(undefined);
-  const router = useRouter();
+  const [data, setData] = useState<any>(null);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const res = await fetch("/api/timer/current");
-      if (!res.ok) {
-        router.refresh();
-      }
+  const load = async () => {
+    const active = await getActiveSession();
 
-      const json = await res.json();
-      setData(json.data);
-    } catch (err) {
-      console.error("Fetch timer error:", err);
-    }
-  }, [router]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 60000);
-
-    return () => clearInterval(interval);
-  }, [fetchData]);
-
-  const start = async (value: any) => {
-    try {
-      const res = await fetch(`/api/timer/start`, {
-        method: "POST",
-        body: JSON.stringify({
-          force: true,
-          ...value,
-        }),
+    if (active) {
+      setData({
+        ...active,
+        hasActiveTimer: true,
       });
-      const response = await res.json();
-      if (!res.ok) {
-        toast.error(response?.message);
-        return;
-      }
-      fetchData();
-    } catch (error) {
-      console.log(error);
+      return;
     }
+
+    const today = await getTodaySession();
+
+    if (today) {
+      setData({
+        ...today,
+        hasActiveTimer: false,
+      });
+      return;
+    }
+    setData({
+      hasActiveTimer: false,
+      status: "idle",
+      breaks: [],
+    });
   };
 
-  const pause = async (value: any) => {
-    try {
-      const res = await fetch(`/api/timer/pause`, {
-        method: "POST",
-        body: JSON.stringify({
-          ...value,
-        }),
-      });
-      const response = await res.json();
-      if (!res.ok) {
-        toast.error(response?.message);
-        return;
-      }
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
+  useEffect(() => {
+    const handleFocus = () => load();
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => window.removeEventListener("focus", handleFocus);
+  }, []);
+
+  useEffect(() => {
+    load();
+
+    const interval = setInterval(() => {
+      load();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const start = async (v: any) => {
+    await startWorking(v);
+    await load();
+  };
+
+  const pause = async (v: any) => {
+    await pauseWorking(v);
+    await load();
   };
 
   const resume = async () => {
-    try {
-      const res = await fetch(`/api/timer/resume`, {
-        method: "POST",
-        body: JSON.stringify({}),
-      });
-      const response = await res.json();
-      if (!res.ok) {
-        toast.error(response?.message);
-        return;
-      }
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
+    await resumeWorking();
+    await load();
   };
 
   const stop = async () => {
-    try {
-      const res = await fetch(`/api/timer/stop`, {
-        method: "POST",
-        body: JSON.stringify({}),
-      });
-      const response = await res.json();
-      if (!res.ok) {
-        toast.error(response?.message);
-        return;
-      }
-      fetchData();
-      toast.success("Clocked out successfully. ");
-    } catch (error) {
-      console.log(error);
-    }
+    await stopWorking();
+    await load();
   };
 
   return {
