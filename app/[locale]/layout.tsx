@@ -41,7 +41,7 @@ export default async function RootLayout({
       <body
         className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a] max-h-dvh overflow-hidden`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light">
           <React.Suspense fallback={<Spinner className="size-6" />}>
             <NextIntlClientProvider messages={messages}>
               {children}
