@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Page = () => {
   return (
-    <main className="relative mx-auto max-w-md min-h-screen overflow-hidden bg-white dark:bg-[#03020F]">
+    <main className="relative mx-auto max-w-md min-h-dvh overflow-hidden bg-white dark:bg-[#03020F]">
       <Image
         src="/images/bg-onboarding.png"
         alt="Boarding"
@@ -13,7 +13,7 @@ const Page = () => {
         className="object-cover"
       />
       <div className="absolute inset-0 bg-black/50" />
-      <div className="relative z-10 h-screen flex flex-col justify-end gap-24 pb-10 px-5">
+      <div className="relative z-10 h-dvh flex flex-col justify-end gap-24 pb-10 px-5">
         <div className="flex flex-col gap-3">
           <h3 className="text-white font-semibold text-2xl text-center">
             Track your work time easily

@@ -39,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a] max-h-screen overflow-hidden`}
+        className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a] max-h-dvh overflow-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <React.Suspense fallback={<Spinner className="size-6" />}>
