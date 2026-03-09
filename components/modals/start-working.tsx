@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import { useEffect, useState } from "react";
-import SelectWithForm from "../form-hook/select";
-import TextAreaWithForm from "../form-hook/text-area";
-import { Button } from "../ui/button";
+'use client';
+import { useEffect, useState } from 'react';
+import SelectWithForm from '../form-hook/select';
+import TextAreaWithForm from '../form-hook/text-area';
+import { Button } from '../ui/button';
 import {
   Drawer,
   DrawerContent,
@@ -11,8 +11,9 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "../ui/drawer";
-import { FormProvider, useForm } from "react-hook-form";
+} from '../ui/drawer';
+import { FormProvider, useForm } from 'react-hook-form';
+import { fetchWithCache } from '@/lib/offline-cache';
 
 const StartWorking = ({
   open,
@@ -29,22 +30,40 @@ const StartWorking = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/projects");
-      const { data } = await res.json();
-      setOptions(
-        data.projects.map((item: { id: number; name: string }) => ({
-          key: item.id,
-          label: item.name,
-        })),
-      );
-      const response = await fetch("/api/locations");
-      const { data: dataLocation } = await response.json();
-      setLocations(
-        dataLocation.locations.map((item: { id: number; name: string }) => ({
-          key: item.id,
-          label: item.name,
-        })),
-      );
+      try {
+        const projectResult = await fetchWithCache('projects', '/api/projects');
+        if (projectResult?.data?.projects) {
+          setOptions(
+            projectResult.data.projects.map(
+              (item: { id: number; name: string }) => ({
+                key: item.id,
+                label: item.name,
+              }),
+            ),
+          );
+        }
+      } catch (err) {
+        console.warn('[offline] Failed to fetch projects:', err);
+      }
+
+      try {
+        const locationResult = await fetchWithCache(
+          'locations',
+          '/api/locations',
+        );
+        if (locationResult?.data?.locations) {
+          setLocations(
+            locationResult.data.locations.map(
+              (item: { id: number; name: string }) => ({
+                key: item.id,
+                label: item.name,
+              }),
+            ),
+          );
+        }
+      } catch (err) {
+        console.warn('[offline] Failed to fetch locations:', err);
+      }
     };
     if (open) {
       fetchData();
@@ -64,7 +83,7 @@ const StartWorking = ({
   return (
     <Drawer open={open} onOpenChange={onClose}>
       <DrawerContent>
-        <DrawerHeader className="items-start px-0">
+        <DrawerHeader className='items-start px-0'>
           <DrawerTitle>Start Working</DrawerTitle>
           <DrawerDescription>
             Add a few details before we begin.
@@ -72,37 +91,35 @@ const StartWorking = ({
         </DrawerHeader>
         <FormProvider {...form}>
           <form
-            className="flex flex-col gap-4"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
+            className='flex flex-col gap-4'
+            onSubmit={form.handleSubmit(onSubmit)}>
             <SelectWithForm
-              label="Project"
-              name="project"
+              label='Project'
+              name='project'
               options={options}
-              placeholder="Select project"
+              placeholder='Select project'
             />
             <SelectWithForm
-              label="Location"
-              name="location"
+              label='Location'
+              name='location'
               options={locations}
-              placeholder="Select location"
+              placeholder='Select location'
             />
             <TextAreaWithForm
-              name="note"
-              label="Note (Optional)"
-              placeholder="e.g. Client meeting, design review"
-              classNameInput="h-[140px]"
+              name='note'
+              label='Note (Optional)'
+              placeholder='e.g. Client meeting, design review'
+              classNameInput='h-[140px]'
             />
-            <DrawerFooter className="flex items-center gap-2 flex-row px-0">
+            <DrawerFooter className='flex items-center gap-2 flex-row px-0'>
               <Button
-                className="flex-1"
-                variant={"outline"}
-                type="button"
-                onClick={onClose}
-              >
+                className='flex-1'
+                variant={'outline'}
+                type='button'
+                onClick={onClose}>
                 Cancel
               </Button>
-              <Button className="flex-1">Start Work</Button>
+              <Button className='flex-1'>Start Work</Button>
             </DrawerFooter>
           </form>
         </FormProvider>

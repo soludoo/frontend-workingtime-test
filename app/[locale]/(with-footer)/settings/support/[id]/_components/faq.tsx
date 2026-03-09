@@ -1,11 +1,12 @@
-"use client";
+'use client';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { useEffect, useState } from "react";
+} from '@/components/ui/accordion';
+import { fetchWithCache } from '@/lib/offline-cache';
+import { useEffect, useState } from 'react';
 
 type Faqs = {
   id: number;
@@ -26,15 +27,12 @@ const Faq = () => {
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const res = await fetch("/api/settings/support/faq");
-        const { data } = await res.json();
-        if (res.ok) {
-          setFaqs(data.faqs);
-        } else {
-          console.error("Failed to fetch FAQs:", data.message);
+        const result = await fetchWithCache('faq', '/api/settings/support/faq');
+        if (result?.data?.faqs) {
+          setFaqs(result.data.faqs);
         }
       } catch (error) {
-        console.error("Error fetching FAQs:", error);
+        console.warn('[offline] FAQ:', error);
       }
     };
 
@@ -42,14 +40,14 @@ const Faq = () => {
   }, []);
 
   return (
-    <div className="p-5 flex flex-col gap-4">
-      <Accordion type="multiple">
+    <div className='p-5 flex flex-col gap-4'>
+      <Accordion type='multiple'>
         {faqs?.map((faq) => (
           <AccordionItem value={String(faq.id)} key={faq.id}>
-            <AccordionTrigger className="text-black text-sm">
+            <AccordionTrigger className='text-black text-sm'>
               {faq.question}
             </AccordionTrigger>
-            <AccordionContent className="text-sm text-body">
+            <AccordionContent className='text-sm text-body'>
               {faq.answer}
             </AccordionContent>
           </AccordionItem>

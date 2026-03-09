@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import SelectDrawerWithForm from "@/components/form-hook/select-drawer";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
-import InputType from "./input-type";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
-import { useRouter } from "next/navigation";
+'use client';
+import SelectDrawerWithForm from '@/components/form-hook/select-drawer';
+import { Button } from '@/components/ui/button';
+import { fetchWithCache } from '@/lib/offline-cache';
+import { useEffect, useState } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import InputType from './input-type';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/ui/spinner';
+import { useRouter } from 'next/navigation';
 
 const Content = () => {
   const form = useForm();
   const leaveTypeId = useWatch({
     control: form.control,
-    name: "leave_type_id",
+    name: 'leave_type_id',
   });
 
   const router = useRouter();
@@ -22,14 +23,21 @@ const Content = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/leave/type");
-      const { data } = await res.json();
-      setOptions(
-        data.leave_types.map((item: { id: string; name: string }) => ({
-          key: item.id,
-          label: item.name,
-        })),
-      );
+      try {
+        const result = await fetchWithCache('leave_types', '/api/leave/type');
+        if (result?.data?.leave_types) {
+          setOptions(
+            result.data.leave_types.map(
+              (item: { id: string; name: string }) => ({
+                key: item.id,
+                label: item.name,
+              }),
+            ),
+          );
+        }
+      } catch (err) {
+        console.warn('[offline] leave types:', err);
+      }
     };
     fetchData();
   }, []);
@@ -52,22 +60,22 @@ const Content = () => {
     try {
       setIsLoading(true);
       const res = await fetch(`/api/leave/request`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result.message || "Failed to update profile");
+        throw new Error(result.message || 'Failed to update profile');
       }
       form.reset({});
       toast.success(
         result.message ||
-          "Your request has been submitted and is waiting for approval.",
+          'Your request has been submitted and is waiting for approval.',
       );
-      router.push("/request-vacation");
+      router.push('/request-vacation');
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
@@ -79,20 +87,19 @@ const Content = () => {
   return (
     <FormProvider {...form}>
       <form
-        className="flex-1 flex flex-col justify-between gap-10 py-5"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div className="flex flex-col gap-4">
+        className='flex-1 flex flex-col justify-between gap-10 py-5'
+        onSubmit={form.handleSubmit(onSubmit)}>
+        <div className='flex flex-col gap-4'>
           <SelectDrawerWithForm
             options={options}
-            name="leave_type_id"
-            label="Type of leave"
-            placeholder="Choose your type of leave"
+            name='leave_type_id'
+            label='Type of leave'
+            placeholder='Choose your type of leave'
           />
           <InputType />
         </div>
         <Button disabled={isLoading}>
-          {isLoading && <Spinner className="size-5" />}Submit Request
+          {isLoading && <Spinner className='size-5' />}Submit Request
         </Button>
       </form>
     </FormProvider>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WorkSession } from "@/type/work-session";
-import { getDB } from "./db";
+import { WorkSession } from '@/type/work-session';
+import { getDB } from './db';
 
 export async function getActiveSession() {
   const db = await getDB();
@@ -11,7 +11,7 @@ export async function getActiveSession() {
   const sessions = result.rows.map((r: any) => r.doc);
 
   return sessions.find(
-    (s: any) => s.status === "running" || s.status === "on_break",
+    (s: any) => s.status === 'running' || s.status === 'on_break',
   );
 }
 
@@ -24,11 +24,11 @@ export async function getTodaySession() {
 
   const sessions = result.rows.map((r: any) => r.doc);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split('T')[0];
 
   return sessions
     .filter(
-      (s: any) => s.date === today && s.status === "stopped" && s.clock_out,
+      (s: any) => s.date === today && s.status === 'stopped' && s.clock_out,
     )
     .sort(
       (a: any, b: any) =>
@@ -46,11 +46,11 @@ export async function startWorking(payload: {
   const active = await getActiveSession();
 
   if (active) {
-    throw new Error("Active session already running");
+    throw new Error('Active session already running');
   }
 
   const now = new Date();
-  const today = now.toISOString().split("T")[0];
+  const today = now.toISOString().split('T')[0];
 
   const session: WorkSession = {
     _id: `session_${Date.now()}`,
@@ -62,10 +62,10 @@ export async function startWorking(payload: {
     project_id: payload.projectId,
     work_location: payload.locationId,
     description: payload.notes,
-    source: "PWA",
-    status: "running",
+    source: 'PWA',
+    status: 'running',
     breaks: [],
-    syncs: "pending",
+    syncs: 'pending',
   };
 
   await db.put(session);
@@ -90,7 +90,7 @@ export async function pauseWorking(breakData: {
     description: breakData.notes,
   });
 
-  active.status = "on_break";
+  active.status = 'on_break';
 
   await db.put(active);
 }
@@ -114,7 +114,7 @@ export async function resumeWorking() {
     active.total_paused_seconds += lastBreak.duration_seconds;
   }
 
-  active.status = "running";
+  active.status = 'running';
 
   await db.put(active);
 }
@@ -128,7 +128,7 @@ export async function stopWorking() {
   const now = new Date();
 
   active.clock_out = now.toISOString();
-  active.status = "stopped";
+  active.status = 'stopped';
 
   const totalSeconds =
     (now.getTime() - new Date(active.clock_in).getTime()) / 1000;
@@ -150,7 +150,7 @@ export async function getPendingSessions() {
 
   return result.rows
     .map((r: any) => r.doc)
-    .filter((d: any) => d.syncs === "pending" && d.status === "stopped");
+    .filter((d: any) => d.syncs === 'pending' && d.status === 'stopped');
 }
 export async function trySync() {
   if (!navigator.onLine) return;
@@ -162,22 +162,22 @@ export async function trySync() {
 
   const pending = result.rows
     .map((r: any) => r.doc)
-    .filter((d: any) => d.syncs === "pending" && d.status === "stopped");
+    .filter((d: any) => d.syncs === 'pending' && d.status === 'stopped');
 
   for (const session of pending) {
     try {
-      const res = await fetch("/api/timer/sync", {
-        method: "POST",
+      const res = await fetch('/api/timer/sync', {
+        method: 'POST',
         body: JSON.stringify(session),
       });
 
       if (!res.ok) continue;
 
-      session.syncs = "synced";
+      session.syncs = 'synced';
 
       await db.put(session);
     } catch (err) {
-      console.log("sync failed", err);
+      console.log('sync failed', err);
     }
   }
 }
@@ -212,11 +212,11 @@ async function syncPendingSessions() {
   const payload = buildPayload(pending);
 
   try {
-    const res = await fetch("https://apilayer.vercel.app/api/me/timer/stop", {
-      method: "POST",
+    const res = await fetch('/api/timer/stop', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify(payload),
     });
@@ -224,10 +224,10 @@ async function syncPendingSessions() {
     if (!res.ok) return;
 
     for (const session of pending) {
-      session.syncs = "synced";
+      session.syncs = 'synced';
       await db.put(session);
     }
   } catch (err) {
-    console.log("sync failed", err);
+    console.log('sync failed', err);
   }
 }

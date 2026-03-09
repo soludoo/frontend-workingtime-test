@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
+import React from 'react';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
 
-import { routing } from "@/i18n/routing";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-import PrimaryColorProvider from "@/components/theme/primary-color-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { Spinner } from "@/components/ui/spinner";
+import { routing } from '@/i18n/routing';
+import { ThemeProvider } from '@/components/theme/theme-provider';
+import PrimaryColorProvider from '@/components/theme/primary-color-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { Spinner } from '@/components/ui/spinner';
+import OfflineBanner from '@/components/share/offline-banner';
 
 export default async function LocaleLayout({
   children,
@@ -26,14 +27,15 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <React.Suspense fallback={<Spinner className="size-6" />}>
+    <ThemeProvider attribute='class' defaultTheme='light'>
+      <React.Suspense fallback={<Spinner className='size-6' />}>
         <NextIntlClientProvider messages={messages}>
+          <OfflineBanner />
           {children}
         </NextIntlClientProvider>
       </React.Suspense>
       <PrimaryColorProvider />
-      <Toaster richColors position="top-center" />
+      <Toaster richColors position='top-center' />
     </ThemeProvider>
   );
 }
