@@ -42,6 +42,10 @@ export function proxy(req: NextRequest) {
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
+  if (pathname.endsWith("manifest.webmanifest")) {
+    return NextResponse.next();
+  }
+
   if (cleanPath === "/admin") {
     const url = req.nextUrl.clone();
     url.pathname = `/${locale}/admin/dashboard`;
@@ -68,6 +72,6 @@ export function proxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next|favicon.ico|images|icons|manifest.json|manifest.ts|sw.js|workbox|api).*)",
+    "/((?!_next|favicon.ico|images|icons|manifest.json|manifest.webmanifest|sw.js|workbox|api).*)",
   ],
 };
