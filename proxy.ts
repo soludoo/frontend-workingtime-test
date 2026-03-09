@@ -42,6 +42,10 @@ export function proxy(req: NextRequest) {
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
+  if (pathname.startsWith("/serwist")) {
+    return NextResponse.next();
+  }
+
   if (pathname.endsWith("manifest.webmanifest")) {
     return NextResponse.next();
   }
@@ -72,6 +76,6 @@ export function proxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next|api|favicon.ico|manifest.webmanifest|sw.js|workbox|icons|images).*)",
+    "/((?!api|_next|serwist|favicon.ico|manifest.webmanifest|icons|images|.*\\..*).*)",
   ],
 };
