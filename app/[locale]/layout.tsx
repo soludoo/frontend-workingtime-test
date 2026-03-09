@@ -9,7 +9,6 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import PrimaryColorProvider from "@/components/theme/primary-color-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Spinner } from "@/components/ui/spinner";
-import { ServiceWorkerRegister } from "@/components/layout/service-worker";
 
 export default async function LocaleLayout({
   children,
@@ -33,8 +32,6 @@ export default async function LocaleLayout({
           {children}
         </NextIntlClientProvider>
       </React.Suspense>
-
-      <ServiceWorkerRegister />
       <PrimaryColorProvider />
       <Toaster richColors position="top-center" />
     </ThemeProvider>
