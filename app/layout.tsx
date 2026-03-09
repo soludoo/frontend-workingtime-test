@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { SerwistProvider } from "./serwist";
 
 export const metadata: Metadata = {
   title: "Working App",
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-[#DBDBDB] dark:bg-[#12182a] max-h-dvh overflow-hidden`}
       >
-        {children}
+        <SerwistProvider swUrl="/serwist/sw.js">{children}</SerwistProvider>
       </body>
     </html>
   );

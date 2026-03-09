@@ -1,19 +1,13 @@
+import { withSerwist } from "@serwist/turbopack";
 import withNextIntl from "next-intl/plugin";
-import withPWA from "next-pwa";
+import type { NextConfig } from "next";
 
 const withNextIntlPlugin = withNextIntl();
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
-    domains: ["github.com"],
+    remotePatterns: [new URL("https://github.com/**")],
   },
 };
 
-const pwa = withPWA({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-});
-
-export default withNextIntlPlugin(pwa(nextConfig));
+export default withSerwist(withNextIntlPlugin(nextConfig));
