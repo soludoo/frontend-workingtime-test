@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import TextAreaWithForm from "@/components/form-hook/text-area";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import TextAreaWithForm from '@/components/form-hook/text-area';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { useNetworkStatus } from '@/hooks/use-network-status';
+import { fetchWithCache } from '@/lib/offline-cache';
+import { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type FormValues = {
   address: string;
@@ -12,21 +14,25 @@ type FormValues = {
 
 const Address = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const isOnline = useNetworkStatus();
   const form = useForm<FormValues>({
     defaultValues: {
-      address: "",
+      address: '',
     },
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/settings/company`);
-      const {
-        data: { company },
-      } = await res.json();
-      form.reset({
-        address: company?.address || "",
-      });
+      const result = await fetchWithCache(
+        'company_settings',
+        '/api/settings/company',
+      );
+      const company = result?.data?.company;
+      if (company) {
+        form.reset({
+          address: company?.address || '',
+        });
+      }
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,9 +42,9 @@ const Address = () => {
     try {
       setIsLoading(true);
       const res = await fetch(`/api/settings/company/address`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           address: data.address.trim(),
@@ -46,7 +52,7 @@ const Address = () => {
       });
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result.message || "Failed to update company");
+        throw new Error(result.message || 'Failed to update company');
       }
       form.reset({
         address: result.data?.company?.address ?? data.address,
@@ -64,12 +70,15 @@ const Address = () => {
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="px-5 flex-1 flex flex-col justify-between py-9 gap-10"
-      >
-        <TextAreaWithForm name={"address"} label={"Address"} />
-        <Button disabled={isLoading}>
+        className='px-5 flex-1 flex flex-col justify-between py-9 gap-10'>
+        <TextAreaWithForm
+          name={'address'}
+          label={'Address'}
+          disabled={!isOnline}
+        />
+        <Button disabled={isLoading || !isOnline}>
           {isLoading && <Spinner />}
-          Save
+          {isOnline ? 'Save' : 'Offline - Read Only'}
         </Button>
       </form>
     </FormProvider>

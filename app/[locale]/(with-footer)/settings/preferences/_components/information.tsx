@@ -1,12 +1,14 @@
-"use client";
-import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React from "react";
+'use client';
+import { useNetworkStatus } from '@/hooks/use-network-status';
+import { ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 const Informations = () => {
   const router = useRouter();
+  const isOnline = useNetworkStatus();
   return (
-    <div className="p-5 flex flex-col gap-4">
+    <div className='p-5 flex flex-col gap-4'>
       {/* <button
         onClick={() => router.push(`/settings/preferences/edit/language`)}
         className="flex items-center justify-between"
@@ -17,26 +19,30 @@ const Informations = () => {
           <ChevronRight className="size-5 text-body-400" />
         </div>
       </button> */}
-      <div className="border-b border-border w-full" />
+      <div className='border-b border-border w-full' />
       <button
-        onClick={() => router.push(`/settings/preferences/edit/time-format`)}
-        className="flex items-center justify-between"
-      >
-        <p className="text-black text-sm">Time Format</p>
-        <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">24-hour</p>
-          <ChevronRight className="size-5 text-body-400" />
+        onClick={() =>
+          isOnline && router.push(`/settings/preferences/edit/time-format`)
+        }
+        className='flex items-center justify-between'
+        disabled={!isOnline}>
+        <p className='text-black text-sm'>Time Format</p>
+        <div className='flex items-center gap-2'>
+          <p className='text-body-400 text-sm'>24-hour</p>
+          {isOnline && <ChevronRight className='size-5 text-body-400' />}
         </div>
       </button>
-      <div className="border-b border-border w-full" />
+      <div className='border-b border-border w-full' />
       <button
-        onClick={() => router.push(`/settings/preferences/edit/first-day`)}
-        className="flex items-center justify-between"
-      >
-        <p className="text-black text-sm">First day of week</p>
-        <div className="flex items-center gap-2">
-          <p className="text-body-400 text-sm">Monday</p>
-          <ChevronRight className="size-5 text-body-400" />
+        onClick={() =>
+          isOnline && router.push(`/settings/preferences/edit/first-day`)
+        }
+        className='flex items-center justify-between'
+        disabled={!isOnline}>
+        <p className='text-black text-sm'>First day of week</p>
+        <div className='flex items-center gap-2'>
+          <p className='text-body-400 text-sm'>Monday</p>
+          {isOnline && <ChevronRight className='size-5 text-body-400' />}
         </div>
       </button>
     </div>

@@ -18,9 +18,48 @@ const API_CACHE = `api-${CACHE_VERSION}`;
 const ASSETS_CACHE = `assets-${CACHE_VERSION}`;
 const VALID_CACHES = [PAGES_CACHE, API_CACHE, ASSETS_CACHE];
 
-// ─── INSTALL: Skip waiting immediately ───────────
-self.addEventListener('install', () => {
-  self.skipWaiting();
+// Important pages to precache during install
+const APP_SHELL_PAGES = [
+  '/en',
+  '/en/settings',
+  '/en/settings/personal-information',
+  '/en/settings/preferences',
+  '/en/settings/support',
+  '/en/settings/about-app',
+];
+
+// ─── INSTALL: Precache app shell pages + Next.js Assets ───
+self.addEventListener('install', (event) => {
+  const manifestUrls = (self.__SW_MANIFEST || []).map((entry) =>
+    typeof entry === 'string' ? entry : entry.url,
+  );
+
+  event.waitUntil(
+    Promise.all([
+      // Precache HTML pages
+      caches.open(PAGES_CACHE).then((cache) =>
+        Promise.allSettled(
+          APP_SHELL_PAGES.map(async (url) => {
+            try {
+              const response = await fetch(url);
+              if (response.ok) await cache.put(url, response);
+            } catch {}
+          }),
+        ),
+      ),
+      // Precache JS/CSS assets needed for hydration
+      caches.open(ASSETS_CACHE).then((cache) =>
+        Promise.allSettled(
+          manifestUrls.map(async (url) => {
+            try {
+              const response = await fetch(url);
+              if (response.ok) await cache.put(url, response);
+            } catch {}
+          }),
+        ),
+      ),
+    ]).then(() => self.skipWaiting()),
+  );
 });
 
 // ─── ACTIVATE: Clean ALL old caches + claim clients ──
@@ -87,6 +126,14 @@ async function networkFirst(
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
     if (cached) return cached;
+
+    // Try matching without query string for navigation
+    if (isNavigation) {
+      const url = new URL(request.url);
+      const pathOnly = url.origin + url.pathname;
+      const cachedByPath = await cache.match(pathOnly);
+      if (cachedByPath) return cachedByPath;
+    }
 
     // Nothing cached
     if (isNavigation) return offlineFallback();

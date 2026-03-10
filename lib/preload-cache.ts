@@ -20,6 +20,10 @@ export async function preloadEssentialData() {
     { key: 'notifications', url: '/api/notifications' },
     { key: 'correction_types', url: '/api/correction/type' },
     { key: 'leave_types', url: '/api/leave/type' },
+    // Settings endpoints for offline read-only access
+    { key: 'company_settings', url: '/api/settings/company' },
+    { key: 'support_info', url: '/api/settings/support/info' },
+    { key: 'faq', url: '/api/settings/support/faq' },
   ];
 
   const results = await Promise.allSettled(

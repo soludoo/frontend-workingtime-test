@@ -1,7 +1,7 @@
-"use client";
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
-import React, { ReactNode } from "react";
+'use client';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import React, { ReactNode } from 'react';
 
 const BorderSection = ({
   content,
@@ -12,56 +12,62 @@ const BorderSection = ({
     url?: string;
     customAction?: () => void;
     customIcon?: ReactNode;
+    disabled?: boolean;
   }[];
 }) => {
   return (
-    <div className="border border-border rounded-2xl p-4 flex flex-col gap-3">
+    <div className='border border-border rounded-2xl p-4 flex flex-col gap-3'>
       {content.map((item, index) =>
         item.customAction ? (
-          <div key={item.title} className="flex flex-col gap-3">
+          <div key={item.title} className='flex flex-col gap-3'>
             <button
               onClick={item.customAction}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
+              disabled={item.disabled}
+              className={`flex items-center justify-between ${
+                item.disabled ? 'opacity-50 cursor-not-allowed' : ''
+              }`}>
+              <div className='flex items-center gap-2'>
                 {item.icon}
-                <h2 className="text-sm text-black">{item.title}</h2>
+                <h2 className='text-sm text-black'>{item.title}</h2>
               </div>
               <div>
                 {item.customIcon ? (
                   item.customIcon
                 ) : (
-                  <ChevronRight className="size-5 text-body" />
+                  <ChevronRight className='size-5 text-body' />
                 )}
               </div>
             </button>
             {index + 1 !== content.length && (
-              <div className="border-t border-border" />
+              <div className='border-t border-border' />
             )}
           </div>
         ) : (
-          <div key={item.title} className="flex flex-col gap-3">
+          <div key={item.title} className='flex flex-col gap-3'>
             <Link
-              href={item.url || "#"}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
+              href={item.disabled ? '#' : item.url || '#'}
+              className={`flex items-center justify-between ${
+                item.disabled
+                  ? 'opacity-50 cursor-not-allowed pointer-events-none disable-offline'
+                  : ''
+              }`}>
+              <div className='flex items-center gap-2'>
                 {item.icon}
-                <h2 className="text-sm text-black">{item.title}</h2>
+                <h2 className='text-sm text-black'>{item.title}</h2>
               </div>
               <div>
                 {item.customIcon ? (
                   item.customIcon
                 ) : (
-                  <ChevronRight className="size-5 text-body" />
+                  <ChevronRight className='size-5 text-body' />
                 )}
               </div>
             </Link>
             {index + 1 !== content.length && (
-              <div className="border-t border-border" />
+              <div className='border-t border-border' />
             )}
           </div>
-        )
+        ),
       )}
     </div>
   );

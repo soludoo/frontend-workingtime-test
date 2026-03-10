@@ -1,7 +1,8 @@
-"use client";
-import SignOut from "@/components/modals/sign-out";
-import BorderSection from "@/components/share/border-section";
-import { DarkModeSwitch } from "@/components/theme/dark-mode-switch";
+'use client';
+import SignOut from '@/components/modals/sign-out';
+import BorderSection from '@/components/share/border-section';
+import { DarkModeSwitch } from '@/components/theme/dark-mode-switch';
+import { useNetworkStatus } from '@/hooks/use-network-status';
 import {
   Building2,
   CircleUserRound,
@@ -10,21 +11,22 @@ import {
   Info,
   LogOut,
   SunMoon,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 const Sections = () => {
   const [modal, setModal] = useState(false);
+  const isOnline = useNetworkStatus();
   return (
     <>
       <SignOut open={modal} onClose={() => setModal(false)} />
-      <div className="flex flex-col gap-4">
+      <div className='flex flex-col gap-4'>
         <BorderSection
           content={[
             {
-              icon: <CircleUserRound className="size-5 text-black" />,
-              title: "Personal Information",
-              url: "/settings/personal-information",
+              icon: <CircleUserRound className='size-5 text-black' />,
+              title: 'Personal Information',
+              url: '/settings/personal-information',
             },
             // {
             //   icon: <Building2 className="size-5 text-black" />,
@@ -32,41 +34,43 @@ const Sections = () => {
             //   url: "/settings/company",
             // },
             {
-              icon: <FileSliders className="size-5 text-black" />,
-              title: "Preferences",
-              url: "/settings/preferences",
+              icon: <FileSliders className='size-5 text-black' />,
+              title: 'Preferences',
+              url: '/settings/preferences',
             },
           ]}
         />
         <BorderSection
           content={[
             {
-              icon: <SunMoon className="size-5 text-black" />,
-              title: "Appearance",
+              icon: <SunMoon className='size-5 text-black' />,
+              title: 'Appearance',
               customIcon: <DarkModeSwitch />,
               customAction: () => {},
             },
             {
-              icon: <FileQuestionMark className="size-5 text-black" />,
-              title: "Help & Support",
-              url: "/settings/support",
+              icon: <FileQuestionMark className='size-5 text-black' />,
+              title: 'Help & Support',
+              url: '/settings/support',
             },
             {
-              icon: <Info className="size-5 text-black" />,
-              title: "About App",
-              url: "/settings/about-app",
+              icon: <Info className='size-5 text-black' />,
+              title: 'About App',
+              url: '/settings/about-app',
             },
           ]}
         />
-        <BorderSection
-          content={[
-            {
-              icon: <LogOut className="size-5 text-black" />,
-              title: "Sign out",
-              customAction: () => setModal(true),
-            },
-          ]}
-        />
+        {isOnline && (
+          <BorderSection
+            content={[
+              {
+                icon: <LogOut className='size-5 text-black' />,
+                title: 'Sign out',
+                customAction: () => setModal(true),
+              },
+            ]}
+          />
+        )}
       </div>
     </>
   );

@@ -1,13 +1,15 @@
-"use client";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import React, { useEffect, useState } from "react";
+'use client';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { useNetworkStatus } from '@/hooks/use-network-status';
+import React, { useEffect, useState } from 'react';
 
 const Picture = ({ url }: { url: string }) => {
   const [image, setImage] = useState<string>(
-    url || "https://github.com/shadcn.png",
+    url || 'https://github.com/shadcn.png',
   );
   const [loading, setLoading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const isOnline = useNetworkStatus();
 
   useEffect(() => {
     if (url) {
@@ -16,7 +18,7 @@ const Picture = ({ url }: { url: string }) => {
   }, [url]);
 
   const handlePickImage = () => {
-    if (!loading) {
+    if (!loading && isOnline) {
       fileInputRef.current?.click();
     }
   };
@@ -32,27 +34,27 @@ const Picture = ({ url }: { url: string }) => {
       setLoading(true);
 
       const formData = new FormData();
-      formData.append("profile_photo", file);
+      formData.append('profile_photo', file);
 
-      const res = await fetch("/api/settings/photo", {
-        method: "POST",
+      const res = await fetch('/api/settings/photo', {
+        method: 'POST',
         body: formData,
       });
 
       const result = await res.json();
 
       if (!res.ok) {
-        throw new Error(result.message || "Upload failed");
+        throw new Error(result.message || 'Upload failed');
       }
 
       if (result?.data?.photo_url) {
         setImage(result.data.photo_url);
       }
     } catch (error) {
-      console.error("Upload error:", error);
-      alert("Failed to upload photo");
+      console.error('Upload error:', error);
+      alert('Failed to upload photo');
 
-      setImage(url || "https://github.com/shadcn.png");
+      setImage(url || 'https://github.com/shadcn.png');
     } finally {
       setLoading(false);
     }
@@ -60,24 +62,25 @@ const Picture = ({ url }: { url: string }) => {
 
   return (
     <div
-      className={`flex flex-col gap-3 items-center justify-center cursor-pointer w-fit mx-auto ${
-        loading ? "opacity-60 pointer-events-none" : ""
-      }`}
-      onClick={handlePickImage}
-    >
-      <Avatar className="size-[120px]">
-        <AvatarImage src={image} alt="profile" />
+      className={`flex flex-col gap-3 items-center justify-center w-fit mx-auto ${
+        loading ? 'opacity-60 pointer-events-none' : ''
+      } ${isOnline ? 'cursor-pointer' : ''}`}
+      onClick={handlePickImage}>
+      <Avatar className='size-[120px]'>
+        <AvatarImage src={image} alt='profile' />
       </Avatar>
 
-      <p className="text-body text-xs">
-        {loading ? "Uploading..." : "Tap to change your photo"}
-      </p>
+      {isOnline && (
+        <p className='text-body text-xs'>
+          {loading ? 'Uploading...' : 'Tap to change your photo'}
+        </p>
+      )}
 
       <input
-        type="file"
+        type='file'
         ref={fileInputRef}
-        accept="image/*"
-        className="hidden"
+        accept='image/*'
+        className='hidden'
         onChange={handleChangeImage}
       />
     </div>

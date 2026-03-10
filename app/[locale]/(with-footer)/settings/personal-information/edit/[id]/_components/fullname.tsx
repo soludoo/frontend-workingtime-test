@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import InputWithForm from "@/components/form-hook/input";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import React, { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import InputWithForm from '@/components/form-hook/input';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { useNetworkStatus } from '@/hooks/use-network-status';
+import { fetchWithCache } from '@/lib/offline-cache';
+import React, { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type FormValues = {
   first_name: string;
@@ -13,23 +15,24 @@ type FormValues = {
 
 const FullName = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const isOnline = useNetworkStatus();
   const form = useForm<FormValues>({
     defaultValues: {
-      first_name: "",
-      last_name: "",
+      first_name: '',
+      last_name: '',
     },
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/settings/profile`);
-      const {
-        data: { user },
-      } = await res.json();
-      form.reset({
-        first_name: user?.first_name || "",
-        last_name: user?.last_name || "",
-      });
+      const result = await fetchWithCache('profile', '/api/settings/profile');
+      const user = result?.data?.user;
+      if (user) {
+        form.reset({
+          first_name: user?.first_name || '',
+          last_name: user?.last_name || '',
+        });
+      }
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,9 +42,9 @@ const FullName = () => {
     try {
       setIsLoading(true);
       const res = await fetch(`/api/settings/profile/name`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           first_name: data.first_name.trim(),
@@ -50,7 +53,7 @@ const FullName = () => {
       });
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result.message || "Failed to update profile");
+        throw new Error(result.message || 'Failed to update profile');
       }
       form.reset({
         first_name: result.data?.user?.first_name ?? data.first_name,
@@ -69,15 +72,22 @@ const FullName = () => {
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="px-5 flex-1 flex flex-col justify-between py-9 gap-10"
-      >
-        <div className="flex flex-col gap-4">
-          <InputWithForm name={"first_name"} label={"First Name"} />
-          <InputWithForm name={"last_name"} label={"Last Name"} />
+        className='px-5 flex-1 flex flex-col justify-between py-9 gap-10'>
+        <div className='flex flex-col gap-4'>
+          <InputWithForm
+            name={'first_name'}
+            label={'First Name'}
+            disabled={!isOnline}
+          />
+          <InputWithForm
+            name={'last_name'}
+            label={'Last Name'}
+            disabled={!isOnline}
+          />
         </div>
-        <Button disabled={isLoading}>
+        <Button disabled={isLoading || !isOnline}>
           {isLoading && <Spinner />}
-          Save
+          {isOnline ? 'Save' : 'Offline - Read Only'}
         </Button>
       </form>
     </FormProvider>

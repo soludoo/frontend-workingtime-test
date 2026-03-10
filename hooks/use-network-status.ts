@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { trySync } from '@/lib/work-session';
 
 export function useNetworkStatus() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState<boolean>(true);
 
   useEffect(() => {
-    // Set initial state
+    // Ensure accurate state on mount in case it changed between render and effect
     setIsOnline(navigator.onLine);
 
     const handleOnline = () => {

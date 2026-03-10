@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -238,5 +238,16 @@
   }
   button {
     @apply cursor-pointer;
+  }
+}
+
+@layer utilities {
+  .is-offline .hide-offline {
+    display: none !important;
+  }
+  .is-offline .disable-offline {
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
   }
 }
