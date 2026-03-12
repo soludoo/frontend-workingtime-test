@@ -13,8 +13,10 @@ import {
   SunMoon,
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 const Sections = () => {
+  const t = useTranslations('settingsMain');
   const [modal, setModal] = useState(false);
   const isOnline = useNetworkStatus();
   return (
@@ -25,7 +27,7 @@ const Sections = () => {
           content={[
             {
               icon: <CircleUserRound className='size-5 text-black' />,
-              title: 'Personal Information',
+              title: t('personalInformation'),
               url: '/settings/personal-information',
             },
             // {
@@ -35,7 +37,7 @@ const Sections = () => {
             // },
             {
               icon: <FileSliders className='size-5 text-black' />,
-              title: 'Preferences',
+              title: t('preferences'),
               url: '/settings/preferences',
             },
           ]}
@@ -44,18 +46,18 @@ const Sections = () => {
           content={[
             {
               icon: <SunMoon className='size-5 text-black' />,
-              title: 'Appearance',
+              title: t('appearance'),
               customIcon: <DarkModeSwitch />,
               customAction: () => {},
             },
             {
               icon: <FileQuestionMark className='size-5 text-black' />,
-              title: 'Help & Support',
+              title: t('helpSupport'),
               url: '/settings/support',
             },
             {
               icon: <Info className='size-5 text-black' />,
-              title: 'About App',
+              title: t('aboutApp'),
               url: '/settings/about-app',
             },
           ]}
@@ -65,7 +67,7 @@ const Sections = () => {
             content={[
               {
                 icon: <LogOut className='size-5 text-black' />,
-                title: 'Sign out',
+                title: t('signOut'),
                 customAction: () => setModal(true),
               },
             ]}

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 type FormData = {
   email: string;
@@ -17,6 +18,7 @@ const Page = () => {
   const form = useForm<FormData>();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations("forgotPassword");
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -32,10 +34,10 @@ const Page = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.message || "Failed to request OTP");
+        toast.error(result.message || t("errorMessage"));
         return;
       }
-      toast.success("OTP sent to your email");
+      toast.success(t("successMessage"));
       router.push(`/forgot-password/verification?email=${data.email}`);
     } catch (error: any) {
       console.error(error);
@@ -47,7 +49,7 @@ const Page = () => {
 
   return (
     <section className="flex flex-col h-full">
-      <PageTitleBack title="Forgot Password" className="px-0" />
+      <PageTitleBack title={t("title")} className="px-0" />
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -55,17 +57,17 @@ const Page = () => {
         >
           <div className="flex flex-col gap-6">
             <h1 className="font-medium text-xl text-center">
-              Please enter your e-mail address to receive a verification code
+              {t("description")}
             </h1>
             <InputWithForm
-              label="Email address"
+              label={t("emailLabel")}
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
             />
           </div>
           <Button disabled={isLoading}>
-            {isLoading && <Spinner className="size-5" />} Reset Password
+            {isLoading && <Spinner className="size-5" />} {t("resetButton")}
           </Button>
         </form>
       </FormProvider>

@@ -3,9 +3,11 @@ import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import ActiveRequest from "./active-request";
 import History from "./history";
+import { useTranslations } from "next-intl";
 
 const Content = () => {
   const [tab, setTab] = useState("active-request");
+  const t = useTranslations("requestCorrection");
   return (
     <>
       <div className="flex h-10">
@@ -18,7 +20,7 @@ const Content = () => {
               : "border-border text-body",
           )}
         >
-          Active requests
+          {t("tabActive")}
         </button>
         <button
           className={cn(
@@ -29,7 +31,7 @@ const Content = () => {
           )}
           onClick={() => setTab("history")}
         >
-          History
+          {t("tabHistory")}
         </button>
       </div>
       {tab === "active-request" && <ActiveRequest />}

@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import CardLeave from './card-leave';
 import { Spinner } from '@/components/ui/spinner';
+import { useTranslations } from 'next-intl';
 
 const Past = () => {
+  const t = useTranslations('requestVacation');
   const [data, setData] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,10 +43,10 @@ const Past = () => {
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-black font-semibold text-center'>
-                No Past Requests
+                {t('noPast')}
               </h3>
               <p className='text-black text-sm text-center'>
-                You haven’t made any vacation requests yet.
+                {t('noRequestDesc')}
               </p>
             </div>
           </div>
@@ -67,7 +69,7 @@ const Past = () => {
         <Link href={'/request-vacation/request'}>
           <Button className='text-sm'>
             <Plus />
-            New Request
+            {t('newRequest')}
           </Button>
         </Link>
       </div>

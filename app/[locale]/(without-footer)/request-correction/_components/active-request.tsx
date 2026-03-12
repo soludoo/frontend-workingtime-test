@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import CardLeave from './card-leave';
 import { Spinner } from '@/components/ui/spinner';
+import { useTranslations } from 'next-intl';
 
 const ActiveRequest = () => {
+  const t = useTranslations('requestCorrection');
   const [data, setData] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,11 +46,10 @@ const ActiveRequest = () => {
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-black font-semibold text-center'>
-                No correction requests yet
+                {t('noActive')}
               </h3>
               <p className='text-black text-sm text-center'>
-                If you missed a clock-in or need to fix a time entry, you can
-                request it here.
+                {t('noRequestDesc')}
               </p>
             </div>
           </div>
@@ -96,7 +97,7 @@ const ActiveRequest = () => {
         <Link href={'/request-correction/request'}>
           <Button className='text-sm'>
             <Plus />
-            New Request
+            {t('newRequest')}
           </Button>
         </Link>
       </div>

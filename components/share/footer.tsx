@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils';
 import QuickActionsDrawer from '../modals/quick-actions';
 import { routing } from '@/i18n/routing';
 import { useNetworkStatus } from '@/hooks/use-network-status';
+import { useTranslations } from 'next-intl';
 
 const Footer = () => {
+  const t = useTranslations('footer');
   const pathname = usePathname();
   const [isDrawer, setIsDrawer] = React.useState(false);
   const isOnline = useNetworkStatus();
@@ -41,7 +43,7 @@ const Footer = () => {
                 : 'text-body',
             )}>
             <FileClock className='min-w-6 min-h-6 size-6' />
-            Overview
+            {t("overview")}
           </Link>
           {isOnline && (
             <Button
@@ -61,7 +63,7 @@ const Footer = () => {
                 : 'text-body',
             )}>
             <Settings className='min-w-6 min-h-6 size-6' />
-            Settings
+            {t("settings")}
           </Link>
         </div>
       </footer>

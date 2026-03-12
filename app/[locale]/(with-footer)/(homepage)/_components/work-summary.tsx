@@ -4,8 +4,10 @@ import CardSummary from "@/components/card/card-summary";
 import { calculateWorkDuration } from "@/lib/helper";
 import { Briefcase, ClipboardClock, TicketsPlane, Weight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
+  const t = useTranslations("home");
   const [worked, setWorked] = useState("0h 0m");
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
     return [
       {
         id: 1,
-        title: "Worked",
+        title: t("worked"),
         desription: worked,
         icon: (
           <div className="size-10 rounded-full bg-purple-50 flex items-center justify-center">
@@ -36,7 +38,7 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
       },
       {
         id: 2,
-        title: "Weekly balance",
+        title: t("weeklyBalance"),
         desription: `${summary?.weekly_balance?.remaining_hours}h`,
         icon: (
           <div className="size-10 rounded-full bg-blue-50 flex items-center justify-center">
@@ -46,8 +48,8 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
       },
       {
         id: 3,
-        title: "Vacation",
-        desription: `Left ${summary?.vacation_left?.available}d`,
+        title: t("vacation"),
+        desription: `${t("left")} ${summary?.vacation_left?.available}d`,
         icon: (
           <div className="size-10 rounded-full bg-green-50 flex items-center justify-center">
             <TicketsPlane className="size-5 text-green" />
@@ -56,7 +58,7 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
       },
       {
         id: 4,
-        title: "Overtime",
+        title: t("overtime"),
         desription: summary?.overtime?.today_overtime_formatted,
         icon: (
           <div className="size-10 rounded-full bg-yellow-50 flex items-center justify-center">
@@ -65,11 +67,11 @@ const WorkSummary = ({ summary, data }: { summary: any; data: any }) => {
         ),
       },
     ];
-  }, [worked, summary]);
+  }, [worked, summary, t]);
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-black font-semibold">Work Summary</h2>
+      <h2 className="text-black font-semibold">{t("work-summary")}</h2>
       <div className="grid grid-cols-12 gap-3">
         {summaries.map((item) => (
           <div className="col-span-6" key={item.id}>

@@ -1,11 +1,13 @@
-import PageTitleBack from "@/components/share/page-title-back";
-import React from "react";
-import Informations from "./_components/information";
+import PageTitleBack from '@/components/share/page-title-back';
+import { getTranslations } from 'next-intl/server';
+import React from 'react';
+import Informations from './_components/information';
 
-const Page = () => {
+const Page = async () => {
+  const t = await getTranslations('settings');
   return (
-    <section className="flex flex-col h-full">
-      <PageTitleBack title="Preferences" />
+    <section className='flex flex-col h-full'>
+      <PageTitleBack title={t('preferences')} />
       <Informations />
     </section>
   );

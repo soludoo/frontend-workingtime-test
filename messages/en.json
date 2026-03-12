@@ -1,9 +1,165 @@
 {
   "home": {
-    "start-title": "Let’s start your workday!",
+    "hi": "Hi,",
+    "start-title": "Let's start your workday!",
     "work-summary": "Work Summary",
-    "break-title": "Taking a break ☕ — don’t forget to come back!",
+    "break-title": "Taking a break ☕ — don't forget to come back!",
     "resume-title": "Back to work — nice energy!",
-    "end-work-title": "Worked 8 hours today — awesome job 🎉"
+    "end-work-title": "Worked 8 hours today — awesome job 🎉",
+    "start": "Start",
+    "pause": "Pause",
+    "continue": "Continue",
+    "stop": "Stop",
+    "workdayCompleted": "Your workday is completed.",
+    "youWorked": "You worked",
+    "today": "today.",
+    "worked": "Worked",
+    "weeklyBalance": "Weekly balance",
+    "vacation": "Vacation",
+    "overtime": "Overtime",
+    "left": "Left"
+  },
+  "onBoarding": {
+    "title": "Track your work time easily",
+    "description": "Clock in, manage time entries, and request leave — all in one place.",
+    "signIn": "Sign In"
+  },
+  "login": {
+    "title": "Sign in to your account",
+    "description": "Manage your work schedule, request time off, and view your daily logs with ease. Stay organized and in control of your work life.",
+    "emailLabel": "Email address",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "terms": "Terms of use & Privacy policy"
+  },
+  "settings": {
+    "preferences": "Preferences",
+    "language": "Language",
+    "time-format": "Time Format",
+    "first-day": "First day of week",
+    "edit": "Edit"
+  },
+  "language": {
+    "english": "English",
+    "german": "German",
+    "save": "Save",
+    "success": "Language successfully updated"
+  },
+  "timeFormat": {
+    "24hour": "Use 24-hour format",
+    "24hourDesc": "The time will be displayed from 0 to 23.",
+    "12hour": "Use 12-hour format",
+    "12hourDesc": "The time will be displayed from 1 to 12."
+  },
+  "firstDay": {
+    "monday": "Monday",
+    "mondayDesc": "The week starts on Monday.",
+    "sunday": "Sunday",
+    "sundayDesc": "The week starts on Sunday."
+  },
+  "footer": {
+    "overview": "Overview",
+    "settings": "Settings"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "description": "Please enter your e-mail address to receive a verification code",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "Enter your email",
+    "resetButton": "Reset Password",
+    "successMessage": "OTP sent to your email",
+    "errorMessage": "Failed to request OTP"
+  },
+  "settingsMain": {
+    "title": "Settings",
+    "joined": "Joined",
+    "personalInformation": "Personal Information",
+    "preferences": "Preferences",
+    "appearance": "Appearance",
+    "helpSupport": "Help & Support",
+    "aboutApp": "About App",
+    "signOut": "Sign out"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "requestVacation": "Request vacation",
+    "requestVacationDesc": "Submit a new time-off request",
+    "requestCorrection": "Request correction",
+    "requestCorrectionDesc": "Fix or edit your time entry"
+  },
+  "requestVacation": {
+    "title": "Request Vacation",
+    "tabCurrent": "Current",
+    "tabPast": "Past",
+    "noCurrent": "No Current Requests",
+    "noPast": "No Past Requests",
+    "noRequestDesc": "You haven’t made any vacation requests yet.",
+    "newRequest": "New Request",
+    "newRequestTitle": "New Request",
+    "typeOfLeave": "Type of leave",
+    "chooseLeave": "Choose your type of leave",
+    "submitRequest": "Submit Request",
+    "dateRange": "Date range",
+    "chooseDateRange": "Choose your date range",
+    "comment": "Comment (Optional)",
+    "commentPlaceholder": "ex: “Family trip 🌴”",
+    "expectedDeliveryDate": "Expected Delivery Date (Optional)",
+    "periodMaternityLeave": "Period of maternity leave",
+    "date": "Date",
+    "selectDateLeave": "Select the date of your leave",
+    "dayPart": "Day part",
+    "morning": "Morning (AM)",
+    "afternoon": "Afternoon (PM)",
+    "trainingName": "Training Name",
+    "enterTrainingName": "Enter training name",
+    "provider": "Provider / Organizer",
+    "enterProvider": "Enter provider / organizer",
+    "successSubmit": "Your request has been submitted and is waiting for approval."
+  },
+  "requestCorrection": {
+    "title": "Request Correction",
+    "tabActive": "Active requests",
+    "tabHistory": "History",
+    "noActive": "No correction requests yet",
+    "noHistory": "No correction history yet",
+    "noRequestDesc": "If you missed a clock-in or need to fix a time entry, you can request it here.",
+    "newRequest": "New Request",
+    "newRequestTitle": "New Request",
+    "selectDate": "Select date",
+    "chooseDateCorrect": "Choose the date you want to correct",
+    "issue": "Issue",
+    "chooseIssue": "Choose your type of issue",
+    "submitRequest": "Submit Request",
+    "newClockInTime": "New clock-in time",
+    "enterClockInTime": "Enter clock-in time",
+    "comment": "Comment (Optional)",
+    "commentPlaceholder": "Explain why this change is needed",
+    "startTime": "Start Time",
+    "enterStartTime": "Enter start time",
+    "endTime": "End Time",
+    "enterEndTime": "Enter end time",
+    "breakDuration": "Break Duration",
+    "enterBreakDuration": "Enter break duration",
+    "newClockOutTime": "New clock-out time",
+    "enterClockOutTime": "Enter clock-out time",
+    "oldClockInTime": "Old clock-in time",
+    "enterOldClockInTime": "Enter Old clock-in time",
+    "oldClockOutTime": "Old clock-out time",
+    "enterOldClockOutTime": "Enter Old clock-out time",
+    "oldBreakDuration": "Old break duration",
+    "enterOldBreakDuration": "Enter old break duration",
+    "newBreakDuration": "New break duration",
+    "enterNewBreakDuration": "Enter new break duration",
+    "overtimeStart": "Overtime start",
+    "enterOvertimeStart": "Enter overtime start",
+    "overtimeEnd": "Overtime end",
+    "enterOvertimeEnd": "Enter overtime end",
+    "successSubmit": "Your request has been submitted and is waiting for approval."
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "It seems that the page you are looking for does not exist.",
+    "backHome": "Back to Home"
   }
 }

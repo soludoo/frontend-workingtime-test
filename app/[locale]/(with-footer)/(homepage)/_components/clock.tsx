@@ -54,7 +54,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
           <>
             <ClockButton
               color="green"
-              title="Start"
+              title={t("start")}
               icon={<Play className="size-6" />}
               onClick={() => setIsModalStart(true)}
             />
@@ -68,14 +68,14 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             </div>
             <div className="flex flex-col gap-1">
               <h2 className="text-black font-medium">
-                Your workday is completed.
+                {t("workdayCompleted")}
               </h2>
               <p className="text-sm text-body">
-                You worked{" "}
+                {t("youWorked")}{" "}
                 <span className="text-black font-semibold">
                   {calculateWorkDuration(data)}
                 </span>{" "}
-                today.
+                {t("today")}
               </p>
             </div>
           </div>
@@ -86,7 +86,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             <>
               <ClockButton
                 color="yellow"
-                title="Pause"
+                title={t("pause")}
                 icon={<Pause className="size-6" />}
                 onClick={() => setIsModalBreak(true)}
               />
@@ -97,7 +97,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
           <>
             <ClockButton
               color="blue"
-              title="Continue"
+              title={t("continue")}
               icon={<RefreshCw className="size-6" />}
               onClick={resume}
             />
@@ -110,7 +110,7 @@ const ClockContent = ({ data, start, pause, resume, stop }: any) => {
             <>
               <ClockButton
                 color="red"
-                title="Stop"
+                title={t("stop")}
                 icon={<CircleX className="size-6" />}
                 onClick={() => setIsModal(true)}
               />

@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import React from "react";
 
 const PageTitleBack = ({

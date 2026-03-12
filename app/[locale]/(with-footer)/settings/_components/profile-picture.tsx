@@ -3,8 +3,10 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { fetchWithCache } from '@/lib/offline-cache';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 const ProfilePictures = () => {
+  const t = useTranslations('settingsMain');
   const [data, setData] = useState<any>(undefined);
   const formatted = useMemo(() => {
     if (!data?.start_date) return null;
@@ -44,7 +46,7 @@ const ProfilePictures = () => {
           {data?.full_name}
         </h1>
         {data && (
-          <p className='text-body text-sm text-center'>Joined {formatted}</p>
+          <p className='text-body text-sm text-center'>{t('joined')} {formatted}</p>
         )}
       </div>
     </div>

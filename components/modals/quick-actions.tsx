@@ -3,6 +3,7 @@ import React from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { ChevronRight, FilePenLine, TicketsPlane } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const QuickActionsDrawer = ({
   open,
@@ -12,11 +13,12 @@ const QuickActionsDrawer = ({
   onClose: () => void;
 }) => {
   const router = useRouter();
+  const t = useTranslations("quickActions");
   return (
     <Drawer open={open} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Quick Actions</DrawerTitle>
+          <DrawerTitle>{t("title")}</DrawerTitle>
         </DrawerHeader>
         <div className="flex flex-col gap-5 w-full">
           <button
@@ -32,10 +34,10 @@ const QuickActionsDrawer = ({
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="text-black font-medium text-sm text-start">
-                  Request vacation
+                  {t("requestVacation")}
                 </h3>
                 <p className="text-body text-sm">
-                  Submit a new time-off request
+                  {t("requestVacationDesc")}
                 </p>
               </div>
             </div>
@@ -55,9 +57,9 @@ const QuickActionsDrawer = ({
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="text-black font-medium text-sm text-start">
-                  Request correction
+                  {t("requestCorrection")}
                 </h3>
-                <p className="text-body text-sm">Fix or edit your time entry</p>
+                <p className="text-body text-sm">{t("requestCorrectionDesc")}</p>
               </div>
             </div>
             <ChevronRight className="size-5" />

@@ -9,8 +9,10 @@ import InputType from './input-type';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const Content = () => {
+  const t = useTranslations('requestVacation');
   const form = useForm();
   const leaveTypeId = useWatch({
     control: form.control,
@@ -72,8 +74,7 @@ const Content = () => {
       }
       form.reset({});
       toast.success(
-        result.message ||
-          'Your request has been submitted and is waiting for approval.',
+        result.message || t('successSubmit'),
       );
       router.push('/request-vacation');
     } catch (error: any) {
@@ -93,13 +94,13 @@ const Content = () => {
           <SelectDrawerWithForm
             options={options}
             name='leave_type_id'
-            label='Type of leave'
-            placeholder='Choose your type of leave'
+            label={t('typeOfLeave')}
+            placeholder={t('chooseLeave')}
           />
           <InputType />
         </div>
         <Button disabled={isLoading}>
-          {isLoading && <Spinner className='size-5' />}Submit Request
+          {isLoading && <Spinner className='size-5' />} {t('submitRequest')}
         </Button>
       </form>
     </FormProvider>

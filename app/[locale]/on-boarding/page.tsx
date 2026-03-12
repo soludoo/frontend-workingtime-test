@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const Page = () => {
+  const t = useTranslations("onBoarding");
   return (
     <main className="relative mx-auto max-w-md min-h-dvh overflow-hidden bg-white dark:bg-[#03020F]">
       <Image
@@ -16,14 +18,14 @@ const Page = () => {
       <div className="relative z-10 h-dvh flex flex-col justify-end gap-24 pb-10 px-5">
         <div className="flex flex-col gap-3">
           <h3 className="text-white font-semibold text-2xl text-center">
-            Track your work time easily
+            {t("title")}
           </h3>
           <p className="text-white text-center">
-            Clock in, manage time entries, and request leave — all in one place.
+            {t("description")}
           </p>
         </div>
         <Link href="/login">
-          <Button>Sign In</Button>
+          <Button>{t("signIn")}</Button>
         </Link>
       </div>
     </main>

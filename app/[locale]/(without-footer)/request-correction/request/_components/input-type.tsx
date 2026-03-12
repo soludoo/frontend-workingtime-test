@@ -1,8 +1,10 @@
 import InputWithForm from "@/components/form-hook/input";
 import TextAreaWithForm from "@/components/form-hook/text-area";
 import { useFormContext } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 const InputType = () => {
+  const t = useTranslations("requestCorrection");
   const form = useFormContext();
 
   switch (form.watch("correction_type_id")) {
@@ -11,15 +13,15 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.new_clock_in_time"
-            label="New clock-in time"
-            placeholder="Enter clock-in time"
+            label={t("newClockInTime")}
+            placeholder={t("enterClockInTime")}
             type="time"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -28,27 +30,27 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.start_time"
-            label="Start Time"
-            placeholder="Enter start time"
+            label={t("startTime")}
+            placeholder={t("enterStartTime")}
             type="time"
           />
           <InputWithForm
             name="correction_data.end_time"
-            label="End Time"
-            placeholder="Enter end time"
+            label={t("endTime")}
+            placeholder={t("enterEndTime")}
             type="time"
           />
           <InputWithForm
             name="correction_data.break_duration"
-            label="Break Duration"
-            placeholder="Enter break duration"
+            label={t("breakDuration")}
+            placeholder={t("enterBreakDuration")}
             type="number"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -57,15 +59,15 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.new_clock_out_time"
-            label="New clock-out time"
-            placeholder="Enter clock-out time"
+            label={t("newClockOutTime")}
+            placeholder={t("enterClockOutTime")}
             type="time"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -74,21 +76,21 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.old_clock_in_time"
-            label="Old clock-in time"
-            placeholder="Enter Old clock-in time"
+            label={t("oldClockInTime")}
+            placeholder={t("enterOldClockInTime")}
             type="time"
           />
           <InputWithForm
             name="correction_data.new_clock_in_time"
-            label="New clock-in time"
-            placeholder="Enter New clock-in time"
+            label={t("newClockInTime")}
+            placeholder={t("enterClockInTime")}
             type="time"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -97,21 +99,21 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.old_clock_out_time"
-            label="Old clock-out time"
-            placeholder="Enter Old clock-out time"
+            label={t("oldClockOutTime")}
+            placeholder={t("enterOldClockOutTime")}
             type="time"
           />
           <InputWithForm
             name="correction_data.new_clock_out_time"
-            label="New clock-out time"
-            placeholder="Enter New clock-out time"
+            label={t("newClockOutTime")}
+            placeholder={t("enterClockOutTime")}
             type="time"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -120,19 +122,19 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.old_break_duration"
-            label="Old break duration"
-            placeholder="Enter old break duration"
+            label={t("oldBreakDuration")}
+            placeholder={t("enterOldBreakDuration")}
           />
           <InputWithForm
             name="correction_data.new_break_duration"
-            label="New break duration"
-            placeholder="Enter new break duration"
+            label={t("newBreakDuration")}
+            placeholder={t("enterNewBreakDuration")}
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );
@@ -141,21 +143,21 @@ const InputType = () => {
         <>
           <InputWithForm
             name="correction_data.overtime_start"
-            label="Overtime start"
-            placeholder="Enter overtime start"
+            label={t("overtimeStart")}
+            placeholder={t("enterOvertimeStart")}
             type="time"
           />
           <InputWithForm
             name="correction_data.overtime_end"
-            label="Overtime end"
-            placeholder="Enter overtime end"
+            label={t("overtimeEnd")}
+            placeholder={t("enterOvertimeEnd")}
             type="time"
           />
           <TextAreaWithForm
             name="comment"
-            label="Comment (Optional)"
+            label={t("comment")}
             classNameInput="h-[140px]"
-            placeholder="Explain why this change is needed"
+            placeholder={t("commentPlaceholder")}
           />
         </>
       );

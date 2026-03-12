@@ -11,8 +11,10 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 const Content = () => {
+  const t = useTranslations('requestCorrection');
   const form = useForm();
   const [options, setOptions] = useState([]);
   const router = useRouter();
@@ -86,8 +88,7 @@ const Content = () => {
       }
       form.reset({});
       toast.success(
-        result.message ||
-          'Your request has been submitted and is waiting for approval.',
+        result.message || t('successSubmit'),
       );
       router.push('/request-correction');
     } catch (error: any) {
@@ -106,19 +107,19 @@ const Content = () => {
         <div className='flex flex-col gap-4'>
           <DatePickerWithForm
             name='date'
-            label='Select date'
-            placeholder='Choose the date you want to correct'
+            label={t('selectDate')}
+            placeholder={t('chooseDateCorrect')}
           />
           <SelectDrawerWithForm
             options={options}
             name='correction_type_id'
-            label='Issue'
-            placeholder='Choose your type of issue'
+            label={t('issue')}
+            placeholder={t('chooseIssue')}
           />
           <InputType />
         </div>
         <Button disabled={isLoading}>
-          {isLoading && <Spinner className='size-5' />}Submit Request
+          {isLoading && <Spinner className='size-5' />} {t('submitRequest')}
         </Button>
       </form>
     </FormProvider>

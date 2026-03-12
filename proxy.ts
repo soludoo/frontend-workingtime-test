@@ -34,11 +34,11 @@ function getLocale(pathname: string) {
 
 export function proxy(req: NextRequest) {
   console.log("🔥 MIDDLEWARE HIT:", req.nextUrl.pathname);
-  const intlResponse = intlMiddleware(req);
-
+  
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token_working_app")?.value;
-
+  
+  const savedLocale = req.cookies.get("NEXT_LOCALE")?.value;
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
@@ -52,7 +52,7 @@ export function proxy(req: NextRequest) {
 
   if (cleanPath === "/admin") {
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}/admin/dashboard`;
+    url.pathname = `/${savedLocale || locale}/admin/dashboard`;
     return NextResponse.redirect(url);
   }
 
@@ -60,17 +60,18 @@ export function proxy(req: NextRequest) {
 
   if (!token && !isAuthPage) {
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}/on-boarding`;
+    url.pathname = `/${savedLocale || locale}/on-boarding`;
     url.searchParams.set("redirect", cleanPath);
     return NextResponse.redirect(url);
   }
 
   if (token && isAuthPage) {
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}`;
+    url.pathname = `/${savedLocale || locale}`;
     return NextResponse.redirect(url);
   }
 
+  const intlResponse = intlMiddleware(req);
   return intlResponse ?? NextResponse.next();
 }
 

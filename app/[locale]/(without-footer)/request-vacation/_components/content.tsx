@@ -3,9 +3,11 @@ import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import Current from "./current";
 import Past from "./past";
+import { useTranslations } from "next-intl";
 
 const Content = () => {
   const [tab, setTab] = useState("current");
+  const t = useTranslations("requestVacation");
   return (
     <>
       <div className="flex h-10">
@@ -18,7 +20,7 @@ const Content = () => {
               : "border-border text-body",
           )}
         >
-          Current
+          {t("tabCurrent")}
         </button>
         <button
           className={cn(
@@ -29,7 +31,7 @@ const Content = () => {
           )}
           onClick={() => setTab("past")}
         >
-          Past
+          {t("tabPast")}
         </button>
       </div>
       {tab === "current" && <Current />}

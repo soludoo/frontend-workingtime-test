@@ -11,8 +11,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import { useTranslations } from "next-intl";
 
 const LoginForm = () => {
+  const t = useTranslations("login");
   const [isLoading, setIsLoading] = useState(false);
   const search = useSearchParams();
   const form = useForm<LoginSchema>({
@@ -61,18 +63,18 @@ const LoginForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-4">
-          <InputWithForm name="email" type="email" label="Email address" />
-          <PasswordInputWithForm name="password" label="Password" />
+          <InputWithForm name="email" type="email" label={t("emailLabel")} />
+          <PasswordInputWithForm name="password" label={t("passwordLabel")} />
           <Link
             href={"/forgot-password"}
             className="text-primary text-xs w-fit"
           >
-            Forgot password?
+            {t("forgotPassword")}
           </Link>
         </div>
         <Button className="text-sm" disabled={isLoading}>
           {isLoading && <Spinner />}
-          Sign In
+          {t("signIn")}
         </Button>
       </form>
     </FormProvider>
