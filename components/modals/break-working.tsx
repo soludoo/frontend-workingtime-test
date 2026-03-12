@@ -14,6 +14,7 @@ import {
 } from '../ui/drawer';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchWithCache } from '@/lib/offline-cache';
+import { useTranslations } from 'next-intl';
 
 const BreakWorking = ({
   open,
@@ -25,6 +26,7 @@ const BreakWorking = ({
   onAction: (value: any) => void;
 }) => {
   const form = useForm();
+  const t = useTranslations('trackers.break');
   const [breakTypes, setBreakTypes] = useState<
     { key: string; label: string }[]
   >([]);
@@ -67,9 +69,9 @@ const BreakWorking = ({
     <Drawer open={open} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader className='items-start px-0'>
-          <DrawerTitle>Take a Break</DrawerTitle>
+          <DrawerTitle>{t('title')}</DrawerTitle>
           <DrawerDescription>
-            Select break type before pausing your work.
+            {t('desc')}
           </DrawerDescription>
         </DrawerHeader>
         <FormProvider {...form}>
@@ -77,15 +79,15 @@ const BreakWorking = ({
             className='flex flex-col gap-4'
             onSubmit={form.handleSubmit(onSubmit)}>
             <SelectWithForm
-              label='Break Type'
+              label={t('breakType')}
               name='break_type'
               options={breakTypes}
-              placeholder='Select break type'
+              placeholder={t('selectBreakType')}
             />
             <TextAreaWithForm
               name='note'
-              label='Note (Optional)'
-              placeholder='Add a short note…'
+              label={t('note')}
+              placeholder={t('notePlaceholder')}
               classNameInput='h-[140px]'
             />
             <DrawerFooter className='flex items-center gap-2 flex-row px-0'>
@@ -94,9 +96,9 @@ const BreakWorking = ({
                 variant={'outline'}
                 type='button'
                 onClick={onClose}>
-                Cancel
+                {t('cancel')}
               </Button>
-              <Button className='flex-1'>Start Break</Button>
+              <Button className='flex-1'>{t('startBreak')}</Button>
             </DrawerFooter>
           </form>
         </FormProvider>

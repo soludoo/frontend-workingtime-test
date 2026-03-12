@@ -212,5 +212,47 @@
     "signOutTitle": "Sign Out",
     "signOutDesc": "Are you sure you want to sign out? You will need to log in again to continue.",
     "signOutBtn": "Sign Out"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "mustBeDifferent": "New password must be different from previously used",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmNewPassword": "Confirm New Password",
+    "confirmNewPasswordPlaceholder": "Re-type new password",
+    "submitBtn": "Reset Password",
+    "successTitle": "Reset password success",
+    "successDesc": "Your password has been successfully reset. You can now log in using your new credentials",
+    "backToSignIn": "Back to Sign in"
+  },
+  "trackers": {
+    "start": {
+      "title": "Start Working",
+      "desc": "Add a few details before we begin.",
+      "project": "Project",
+      "selectProject": "Select project",
+      "location": "Location",
+      "selectLocation": "Select location",
+      "note": "Note (Optional)",
+      "notePlaceholder": "e.g. Client meeting, design review",
+      "cancel": "Cancel",
+      "startWork": "Start Work"
+    },
+    "break": {
+      "title": "Take a Break",
+      "desc": "Select break type before pausing your work.",
+      "breakType": "Break Type",
+      "selectBreakType": "Select break type",
+      "note": "Note (Optional)",
+      "notePlaceholder": "Add a short note…",
+      "cancel": "Cancel",
+      "startBreak": "Start Break"
+    },
+    "stop": {
+      "title": "Stop work?",
+      "desc": "You’re about to end your workday. Today’s tracked time will be saved.",
+      "stop": "Stop",
+      "cancel": "Cancel"
+    }
   }
 }

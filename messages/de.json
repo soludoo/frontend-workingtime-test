@@ -212,5 +212,47 @@
     "signOutTitle": "Abmelden",
     "signOutDesc": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um fortzufahren.",
     "signOutBtn": "Abmelden"
+  },
+  "resetPassword": {
+    "title": "Passwort zurücksetzen",
+    "mustBeDifferent": "Das neue Passwort muss sich vom bisherigen unterscheiden",
+    "newPassword": "Neues Passwort",
+    "newPasswordPlaceholder": "Neues Passwort eingeben",
+    "confirmNewPassword": "Neues Passwort bestätigen",
+    "confirmNewPasswordPlaceholder": "Neues Passwort wiederholen",
+    "submitBtn": "Passwort zurücksetzen",
+    "successTitle": "Passwort erfolgreich zurückgesetzt",
+    "successDesc": "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich nun mit Ihren neuen Zugangsdaten anmelden",
+    "backToSignIn": "Zurück zur Anmeldung"
+  },
+  "trackers": {
+    "start": {
+      "title": "Arbeit beginnen",
+      "desc": "Fügen Sie einige Details hinzu, bevor wir beginnen.",
+      "project": "Projekt",
+      "selectProject": "Projekt auswählen",
+      "location": "Ort",
+      "selectLocation": "Ort auswählen",
+      "note": "Notiz (Optional)",
+      "notePlaceholder": "z.B. Kundenmeeting, Design-Überprüfung",
+      "cancel": "Abbrechen",
+      "startWork": "Arbeit beginnen"
+    },
+    "break": {
+      "title": "Pause machen",
+      "desc": "Wählen Sie die Pausenart, bevor Sie die Arbeit unterbrechen.",
+      "breakType": "Pausenart",
+      "selectBreakType": "Pausenart auswählen",
+      "note": "Notiz (Optional)",
+      "notePlaceholder": "Kurze Notiz hinzufügen…",
+      "cancel": "Abbrechen",
+      "startBreak": "Pause beginnen"
+    },
+    "stop": {
+      "title": "Arbeit beenden?",
+      "desc": "Sie sind dabei, Ihren Arbeitstag zu beenden. Die heute erfasste Zeit wird gespeichert.",
+      "stop": "Aufhalten",
+      "cancel": "Abbrechen"
+    }
   }
 }

@@ -7,6 +7,7 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const EndOfWork = ({
   open,
@@ -17,6 +18,7 @@ const EndOfWork = ({
   onClose: () => void;
   onSelect: () => void;
 }) => {
+  const t = useTranslations("trackers.stop");
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-white gap-y-10">
@@ -29,11 +31,10 @@ const EndOfWork = ({
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-black text-center font-semibold text-xl">
-              Stop work?
+              {t("title")}
             </h3>
             <p className="text-body text-sm text-center">
-              You’re about to end your workday. Today’s tracked time will be
-              saved.
+              {t("desc")}
             </p>
           </div>
         </div>
@@ -46,10 +47,10 @@ const EndOfWork = ({
             className="flex-1"
             variant={"destructive"}
           >
-            Stop
+            {t("stop")}
           </Button>
           <Button className="flex-1" onClick={onClose} variant={"outline"}>
-            Cancel
+            {t("cancel")}
           </Button>
         </DialogFooter>
       </DialogContent>

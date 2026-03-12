@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { useTranslations } from "next-intl";
 
 const passwordRules = z
   .string()
@@ -45,6 +46,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const search = useSearchParams();
+  const t = useTranslations("resetPassword");
 
   useEffect(() => {
     const email = search.get("email");
@@ -85,7 +87,7 @@ const Page = () => {
 
   return (
     <section className="flex flex-col h-full">
-      <PageTitleBack title="Reset Password" className="px-0" />
+      <PageTitleBack title={t("title")} className="px-0" />
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -93,21 +95,21 @@ const Page = () => {
         >
           <div className="flex flex-col gap-6">
             <h1 className="font-medium text-xl text-center">
-              New password must be different from previously used
+              {t("mustBeDifferent")}
             </h1>
             <PasswordInputWithForm
               name="new_password"
-              label="New Password"
-              placeholder="Enter new password"
+              label={t("newPassword")}
+              placeholder={t("newPasswordPlaceholder")}
             />
             <PasswordInputWithForm
               name="confirm_password"
-              label="Confirm New Password"
-              placeholder="Re-type new password"
+              label={t("confirmNewPassword")}
+              placeholder={t("confirmNewPasswordPlaceholder")}
             />
           </div>
           <Button disabled={isLoading}>
-            {isLoading && <Spinner className="size-5" />}Reset Password
+            {isLoading && <Spinner className="size-5" />}{t("submitBtn")}
           </Button>
         </form>
       </FormProvider>

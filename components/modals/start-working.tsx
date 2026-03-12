@@ -14,6 +14,7 @@ import {
 } from '../ui/drawer';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchWithCache } from '@/lib/offline-cache';
+import { useTranslations } from 'next-intl';
 
 const StartWorking = ({
   open,
@@ -25,6 +26,7 @@ const StartWorking = ({
   onAction: (value: any) => void;
 }) => {
   const form = useForm();
+  const t = useTranslations('trackers.start');
   const [options, setOptions] = useState([]);
   const [locations, setLocations] = useState([]);
 
@@ -84,9 +86,9 @@ const StartWorking = ({
     <Drawer open={open} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader className='items-start px-0'>
-          <DrawerTitle>Start Working</DrawerTitle>
+          <DrawerTitle>{t('title')}</DrawerTitle>
           <DrawerDescription>
-            Add a few details before we begin.
+            {t('desc')}
           </DrawerDescription>
         </DrawerHeader>
         <FormProvider {...form}>
@@ -94,21 +96,21 @@ const StartWorking = ({
             className='flex flex-col gap-4'
             onSubmit={form.handleSubmit(onSubmit)}>
             <SelectWithForm
-              label='Project'
+              label={t('project')}
               name='project'
               options={options}
-              placeholder='Select project'
+              placeholder={t('selectProject')}
             />
             <SelectWithForm
-              label='Location'
+              label={t('location')}
               name='location'
               options={locations}
-              placeholder='Select location'
+              placeholder={t('selectLocation')}
             />
             <TextAreaWithForm
               name='note'
-              label='Note (Optional)'
-              placeholder='e.g. Client meeting, design review'
+              label={t('note')}
+              placeholder={t('notePlaceholder')}
               classNameInput='h-[140px]'
             />
             <DrawerFooter className='flex items-center gap-2 flex-row px-0'>
@@ -117,9 +119,9 @@ const StartWorking = ({
                 variant={'outline'}
                 type='button'
                 onClick={onClose}>
-                Cancel
+                {t('cancel')}
               </Button>
-              <Button className='flex-1'>Start Work</Button>
+              <Button className='flex-1'>{t('startWork')}</Button>
             </DrawerFooter>
           </form>
         </FormProvider>
