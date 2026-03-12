@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 type FormValues = {
   phone: string;
@@ -16,6 +17,7 @@ type FormValues = {
 const PhoneNumber = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isOnline = useNetworkStatus();
+  const t = useTranslations('personalInformationEdit');
   const form = useForm<FormValues>({
     defaultValues: {
       phone: '',
@@ -72,12 +74,12 @@ const PhoneNumber = () => {
         className='px-5 flex-1 flex flex-col justify-between py-9 gap-10'>
         <PhoneInputWithForm
           name={'phone'}
-          label={'Phone Number'}
+          label={t('phoneNumber')}
           disabled={!isOnline}
         />
         <Button disabled={isLoading || !isOnline}>
           {isLoading && <Spinner />}
-          {isOnline ? 'Save' : 'Offline - Read Only'}
+          {isOnline ? t('save') : t('offlineReadOnly')}
         </Button>
       </form>
     </FormProvider>

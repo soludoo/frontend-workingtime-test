@@ -12,6 +12,7 @@ import {
 import { CircleX } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const DeleteAccountModal = ({
   open,
@@ -21,6 +22,7 @@ const DeleteAccountModal = ({
   onClose: () => void;
 }) => {
   const router = useRouter();
+  const t = useTranslations("modals");
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
@@ -65,11 +67,10 @@ const DeleteAccountModal = ({
 
           <div className="flex flex-col gap-2">
             <p className="text-center text-black text-xl font-semibold">
-              Delete account
+              {t("deleteAccountTitle")}
             </p>
             <p className="text-body text-sm text-center">
-              This action cannot be undone. Your profile and all related data
-              will be permanently removed.
+              {t("deleteAccountDesc")}
             </p>
           </div>
         </div>
@@ -80,7 +81,7 @@ const DeleteAccountModal = ({
             disabled={loading}
             variant={"destructive"}
           >
-            {loading ? "Deleting..." : "Delete Account"}
+            {loading ? t("deleting") : t("deleteAccountBtn")}
           </Button>
           <Button
             onClick={onClose}
@@ -88,7 +89,7 @@ const DeleteAccountModal = ({
             className="flex-1 text-sm"
             disabled={loading}
           >
-            Cancel
+            {t("cancel")}
           </Button>
         </DialogFooter>
       </DialogContent>

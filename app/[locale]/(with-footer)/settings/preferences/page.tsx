@@ -7,7 +7,7 @@ const Page = async () => {
   const t = await getTranslations('settings');
   return (
     <section className='flex flex-col h-full'>
-      <PageTitleBack title={t('preferences')} />
+      <PageTitleBack title={t('preferences')} customLink="/settings" />
       <Informations />
     </section>
   );

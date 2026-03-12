@@ -8,9 +8,11 @@ import PersonalInformation from './personal-information';
 import DeleteAccount from './delete-account';
 import LoadingContent from '@/components/layout/loading-content';
 import Role from './role';
+import { useTranslations } from 'next-intl';
 
 const Content = () => {
   const [data, setData] = useState<any>(undefined);
+  const t = useTranslations('personalInformation');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ const Content = () => {
 
   return (
     <section className='flex flex-col h-full'>
-      <PageTitleBack title='Personal Information' />
+      <PageTitleBack title={t('title')} customLink="/settings" />
       <div className='py-5 flex flex-col gap-5 px-5'>
         <Picture url={data.profile_photo} />
         <PersonalInformation user={data} />

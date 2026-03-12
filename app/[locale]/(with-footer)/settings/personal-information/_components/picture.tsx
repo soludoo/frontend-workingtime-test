@@ -1,9 +1,11 @@
 'use client';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { useNetworkStatus } from '@/hooks/use-network-status';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 const Picture = ({ url }: { url: string }) => {
+  const t = useTranslations('personalInformation');
   const [image, setImage] = useState<string>(
     url || 'https://github.com/shadcn.png',
   );
@@ -72,7 +74,7 @@ const Picture = ({ url }: { url: string }) => {
 
       {isOnline && (
         <p className='text-body text-xs'>
-          {loading ? 'Uploading...' : 'Tap to change your photo'}
+          {loading ? t('uploading') : t('tapToChange')}
         </p>
       )}
 

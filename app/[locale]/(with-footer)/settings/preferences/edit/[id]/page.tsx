@@ -14,7 +14,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <section className='flex flex-col'>
-      <PageTitleBack title={translatedTitle} />
+      <PageTitleBack title={translatedTitle} customLink="/settings/preferences" />
       <Content id={id} />
     </section>
   );

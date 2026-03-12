@@ -18,7 +18,7 @@ const Language = () => {
   const [selected, setSelected] = useState(locale);
 
   useEffect(() => {
-    const savedLocale = localStorage.getItem('i18nextLng') || localStorage.getItem('locale');
+    const savedLocale = localStorage.getItem('locale');
     if (savedLocale && (savedLocale === 'en' || savedLocale === 'de')) {
       setSelected(savedLocale);
     }
@@ -28,7 +28,6 @@ const Language = () => {
     if (!isOnline || selected === locale) return;
     
     localStorage.setItem('locale', selected);
-    localStorage.setItem('i18nextLng', selected);
     document.cookie = `NEXT_LOCALE=${selected}; path=/; max-age=31536000`;
     
     

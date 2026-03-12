@@ -161,5 +161,56 @@
     "title": "Seite nicht gefunden",
     "description": "Es scheint, dass die Seite, die Sie suchen, nicht existiert.",
     "backHome": "Zurück zur Startseite"
+  },
+  "personalInformation": {
+    "title": "Persönliche Informationen",
+    "uploading": "Wird hochgeladen...",
+    "tapToChange": "Tippen Sie hier, um Ihr Foto zu ändern",
+    "fullName": "Vollständiger Name",
+    "phoneNumber": "Telefonnummer",
+    "password": "Passwort",
+    "changePassword": "Passwort ändern",
+    "emailAddress": "E-Mail Adresse",
+    "role": "Rolle",
+    "department": "Abteilung",
+    "workingHours": "Arbeitszeiten",
+    "workModel": "Arbeitsmodell",
+    "manager": "Manager",
+    "employeeId": "Mitarbeiter ID",
+    "deleteAccount": "Löschen Sie Ihr Konto"
+  },
+  "support": {
+    "title": "Hilfe & Support",
+    "faq": "FAQ",
+    "contactSupport": "Support kontaktieren",
+    "reportProblem": "Ein Problem melden"
+  },
+  "aboutApp": {
+    "title": "Über die App",
+    "p1": "Bei Clockwise steht Ihre Privatsphäre an erster Stelle. Befassen Sie sich mit den Besonderheiten der von uns erfassten Daten und entdecken Sie, wie wir Ihnen die Kontrolle über Ihre persönlichen Daten überlassen und ein sicheres und personalisiertes Erlebnis gewährleisten.",
+    "p2": "Der Schutz Ihrer Daten hat für uns oberste Priorität. Unsere umfassende Datenschutzrichtlinie bietet eine ausführliche Erklärung der Maßnahmen, die wir ergreifen, um sicherzustellen, dass Ihre Daten sicher, transparent und integer behandelt werden.",
+    "p3": "Wir glauben an Transparenz und daran, Ihnen die Kontrolle zu geben. Informieren Sie sich im Detail über Ihre Datenschutzrechte und erfahren Sie, wie Sie Ihre Daten problemlos verwalten können, sodass Sie die Kontrolle über Ihre Daten und Einstellungen behalten.",
+    "p4": "Wir verpflichten uns, die höchsten Standards des Datenschutzes einzuhalten. Erkunden Sie unsere detaillierten Praktiken zur Datenerfassung und -nutzung und erhalten Sie Einblicke, wie wir Ihre Privatsphäre und Sicherheit in jedem Schritt priorisieren.",
+    "p5": "Wir verpflichten uns, die höchsten Standards des Datenschutzes einzuhalten. Erkunden Sie unsere detaillierten Praktiken zur Datenerfassung und -nutzung und erhalten Sie Einblicke, wie wir Ihre Privatsphäre und Sicherheit in jedem Schritt priorisieren."
+  },
+  "personalInformationEdit": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "phoneNumber": "Telefonnummer",
+    "enterPassword": "Passwort eingeben",
+    "enterNewPassword": "Neues Passwort eingeben",
+    "confirmNewPassword": "Neues Passwort bestätigen",
+    "save": "Speichern",
+    "offlineReadOnly": "Offline - Nur Lesen"
+  },
+  "modals": {
+    "deleteAccountTitle": "Konto löschen",
+    "deleteAccountDesc": "Diese Aktion kann nicht rückgängig gemacht werden. Ihr Profil und alle damit verbundenen Daten werden dauerhaft entfernt.",
+    "deleteAccountBtn": "Konto löschen",
+    "deleting": "Löschen...",
+    "cancel": "Abbrechen",
+    "signOutTitle": "Abmelden",
+    "signOutDesc": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um fortzufahren.",
+    "signOutBtn": "Abmelden"
   }
 }

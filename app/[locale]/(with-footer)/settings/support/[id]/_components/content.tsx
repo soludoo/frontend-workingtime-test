@@ -9,21 +9,21 @@ const Content = ({ id }: { id: string }) => {
     case "faq":
       return (
         <section className="flex flex-col">
-          <PageTitleBack title={"FAQ"} />
+          <PageTitleBack title={"FAQ"} customLink="/settings/support" />
           <Faq />
         </section>
       );
     case "contact-support":
       return (
         <section className="flex flex-col">
-          <PageTitleBack title={"Contact Support"} />
+          <PageTitleBack title={"Contact Support"} customLink="/settings/support" />
           <ContactSupport />
         </section>
       );
     case "report":
       return (
         <section className="flex flex-col">
-          <PageTitleBack title={"Report a problem"} />
+          <PageTitleBack title={"Report a problem"} customLink="/settings/support" />
           <Report />
         </section>
       );

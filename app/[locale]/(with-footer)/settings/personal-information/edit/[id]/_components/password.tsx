@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
+import { useTranslations } from 'next-intl';
 
 const passwordRules = z
   .string()
@@ -30,6 +31,7 @@ export type FormValues = z.infer<typeof passwordSchema>;
 const Password = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isOnline = useNetworkStatus();
+  const t = useTranslations('personalInformationEdit');
   const form = useForm<FormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -82,26 +84,26 @@ const Password = () => {
         <div className='flex flex-col gap-5'>
           <PasswordInputWithForm
             name={'current_password'}
-            label={'Enter Password'}
+            label={t('enterPassword')}
             placeholder='******'
             disabled={!isOnline}
           />
           <PasswordInputWithForm
             name={'new_password'}
-            label={'Enter new password'}
+            label={t('enterNewPassword')}
             placeholder='******'
             disabled={!isOnline}
           />
           <PasswordInputWithForm
             name={'confirm_password'}
-            label={'Confirm new password'}
+            label={t('confirmNewPassword')}
             placeholder='******'
             disabled={!isOnline}
           />
         </div>
         <Button disabled={isLoading || !isOnline}>
           {isLoading && <Spinner />}
-          {isOnline ? 'Save' : 'Offline - Read Only'}
+          {isOnline ? t('save') : t('offlineReadOnly')}
         </Button>
       </form>
     </FormProvider>

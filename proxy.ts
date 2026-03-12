@@ -42,6 +42,20 @@ export function proxy(req: NextRequest) {
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
+  // Force language persistence: If the URL has a different locale than the saved one,
+  // redirect them. This fixes issues when using the "back" button to an old locale URL.
+  if (
+    savedLocale &&
+    LOCALES.includes(savedLocale as any) &&
+    savedLocale !== locale &&
+    !pathname.startsWith('/serwist') &&
+    !pathname.endsWith('manifest.webmanifest')
+  ) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${savedLocale}${cleanPath}`;
+    return NextResponse.redirect(url);
+  }
+
   if (pathname.startsWith("/serwist")) {
     return NextResponse.next();
   }

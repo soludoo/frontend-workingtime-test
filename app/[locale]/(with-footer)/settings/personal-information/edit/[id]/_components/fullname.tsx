@@ -7,6 +7,7 @@ import { fetchWithCache } from '@/lib/offline-cache';
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 type FormValues = {
   first_name: string;
@@ -16,6 +17,7 @@ type FormValues = {
 const FullName = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isOnline = useNetworkStatus();
+  const t = useTranslations('personalInformationEdit');
   const form = useForm<FormValues>({
     defaultValues: {
       first_name: '',
@@ -76,18 +78,18 @@ const FullName = () => {
         <div className='flex flex-col gap-4'>
           <InputWithForm
             name={'first_name'}
-            label={'First Name'}
+            label={t('firstName')}
             disabled={!isOnline}
           />
           <InputWithForm
             name={'last_name'}
-            label={'Last Name'}
+            label={t('lastName')}
             disabled={!isOnline}
           />
         </div>
         <Button disabled={isLoading || !isOnline}>
           {isLoading && <Spinner />}
-          {isOnline ? 'Save' : 'Offline - Read Only'}
+          {isOnline ? t('save') : t('offlineReadOnly')}
         </Button>
       </form>
     </FormProvider>

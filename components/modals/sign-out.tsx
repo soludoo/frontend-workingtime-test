@@ -11,9 +11,11 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const SignOut = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const router = useRouter();
+  const t = useTranslations("modals");
   const [isLoading, setIsLoading] = useState(false);
   const handleSignOut = async () => {
     try {
@@ -41,11 +43,10 @@ const SignOut = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-black text-center font-semibold text-xl">
-              Sign Out
+              {t("signOutTitle")}
             </h3>
             <p className="text-body text-sm text-center">
-              Are you sure you want to sign out? You will need to log in again
-              to continue.
+              {t("signOutDesc")}
             </p>
           </div>
         </div>
@@ -55,14 +56,14 @@ const SignOut = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
             className="flex-1 text-sm bg-red"
             onClick={handleSignOut}
           >
-            Sign Out
+            {t("signOutBtn")}
           </Button>
           <Button
             disabled={isLoading}
             onClick={onClose}
             className="flex-1 text-sm bg-transparent text-black hover:text-white border border-border"
           >
-            Cancel
+            {t("cancel")}
           </Button>
         </DialogFooter>
       </DialogContent>
