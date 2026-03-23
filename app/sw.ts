@@ -2,7 +2,7 @@
 /// <reference lib="esnext"/>
 /// <reference lib="webworker"/>
 
-import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist';
+import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -12,7 +12,7 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope;
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = "v2";
 const PAGES_CACHE = `pages-${CACHE_VERSION}`;
 const API_CACHE = `api-${CACHE_VERSION}`;
 const ASSETS_CACHE = `assets-${CACHE_VERSION}`;
@@ -20,18 +20,19 @@ const VALID_CACHES = [PAGES_CACHE, API_CACHE, ASSETS_CACHE];
 
 // Important pages to precache during install
 const APP_SHELL_PAGES = [
-  '/en',
-  '/en/settings',
-  '/en/settings/personal-information',
-  '/en/settings/preferences',
-  '/en/settings/support',
-  '/en/settings/about-app',
+  "/en",
+  "/",
+  "/en/settings",
+  "/en/settings/personal-information",
+  "/en/settings/preferences",
+  "/en/settings/support",
+  "/en/settings/about-app",
 ];
 
 // ─── INSTALL: Precache app shell pages + Next.js Assets ───
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   const manifestUrls = (self.__SW_MANIFEST || []).map((entry) =>
-    typeof entry === 'string' ? entry : entry.url,
+    typeof entry === "string" ? entry : entry.url,
   );
 
   event.waitUntil(
@@ -63,7 +64,7 @@ self.addEventListener('install', (event) => {
 });
 
 // ─── ACTIVATE: Clean ALL old caches + claim clients ──
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
@@ -81,21 +82,49 @@ self.addEventListener('activate', (event) => {
 });
 
 // ─── FETCH ───────────────────────────────────────
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Only handle GET
-  if (request.method !== 'GET') return;
+  if (request.method !== "GET") return;
+
+  async function handleNavigation(request: Request): Promise<Response> {
+    try {
+      const response = await fetch(request);
+
+      if (response.ok) {
+        const cache = await caches.open(PAGES_CACHE);
+        cache.put(request, response.clone());
+      }
+
+      return response;
+    } catch {
+      const cache = await caches.open(PAGES_CACHE);
+
+      // 1. coba exact match
+      const cached = await cache.match(request);
+      if (cached) return cached;
+
+      // 2. fallback ke homepage (INI KUNCI NYA 🔥)
+      const fallback = (await cache.match("/en")) || (await cache.match("/"));
+
+      if (fallback) return fallback;
+
+      // 3. terakhir baru offline page
+      return offlineFallback();
+    }
+  }
 
   // 1. Navigation (HTML pages)
-  if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request, PAGES_CACHE, true));
+  if (request.mode === "navigate") {
+    // event.respondWith(networkFirst(request, PAGES_CACHE, true));
+    event.respondWith(handleNavigation(request));
     return;
   }
 
   // 2. API GET requests
-  if (url.origin === self.location.origin && url.pathname.startsWith('/api/')) {
+  if (url.origin === self.location.origin && url.pathname.startsWith("/api/")) {
     event.respondWith(networkFirst(request, API_CACHE, false));
     return;
   }
@@ -116,7 +145,7 @@ async function networkFirst(
 ): Promise<Response> {
   try {
     const response = await fetch(request);
-    if (response.ok && response.type !== 'opaque') {
+    if (response.ok && response.type !== "opaque") {
       const cache = await caches.open(cacheName);
       cache.put(request, response.clone());
     }
@@ -136,8 +165,20 @@ async function networkFirst(
     }
 
     // Nothing cached
-    if (isNavigation) return offlineFallback();
-    return new Response('', { status: 503 });
+    if (isNavigation) {
+      const cache = await caches.open(PAGES_CACHE);
+
+      // fallback ke homepage
+      const fallback =
+        (await cache.match("/en")) ||
+        (await cache.match("/")) ||
+        (await cache.match("/en/index"));
+
+      if (fallback) return fallback;
+
+      return offlineFallback();
+    }
+    return new Response("", { status: 503 });
   }
 }
 
@@ -174,6 +215,6 @@ function offlineFallback(): Response {
   </div>
 </body>
 </html>`,
-    { status: 200, headers: { 'Content-Type': 'text/html' } },
+    { status: 200, headers: { "Content-Type": "text/html" } },
   );
 }
