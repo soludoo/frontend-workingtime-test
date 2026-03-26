@@ -12,13 +12,15 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope;
 
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
+
 const PAGES_CACHE = `pages-${CACHE_VERSION}`;
 const API_CACHE = `api-${CACHE_VERSION}`;
 const ASSETS_CACHE = `assets-${CACHE_VERSION}`;
+
 const VALID_CACHES = [PAGES_CACHE, API_CACHE, ASSETS_CACHE];
 
-// Important pages to precache during install
+// App shell pages (MUST always be cached)
 const APP_SHELL_PAGES = [
   "/en",
   "/",
@@ -29,192 +31,208 @@ const APP_SHELL_PAGES = [
   "/en/settings/about-app",
 ];
 
-// ─── INSTALL: Precache app shell pages + Next.js Assets ───
+// Helper: normalize URL → cache key
+function getCacheKey(request: Request): string {
+  const url = new URL(request.url);
+  return url.pathname.replace(/\/$/, "") || "/";
+}
+
+// ─────────────────────────────────────────────
+// INSTALL
+// ─────────────────────────────────────────────
 self.addEventListener("install", (event) => {
   const manifestUrls = (self.__SW_MANIFEST || []).map((entry) =>
     typeof entry === "string" ? entry : entry.url,
   );
 
   event.waitUntil(
-    Promise.all([
-      // Precache HTML pages
-      caches.open(PAGES_CACHE).then((cache) =>
-        Promise.allSettled(
-          APP_SHELL_PAGES.map(async (url) => {
-            try {
-              const response = await fetch(url);
-              if (response.ok) await cache.put(url, response);
-            } catch {}
-          }),
-        ),
-      ),
-      // Precache JS/CSS assets needed for hydration
-      caches.open(ASSETS_CACHE).then((cache) =>
-        Promise.allSettled(
-          manifestUrls.map(async (url) => {
-            try {
-              const response = await fetch(url);
-              if (response.ok) await cache.put(url, response);
-            } catch {}
-          }),
-        ),
-      ),
-    ]).then(() => self.skipWaiting()),
-  );
-});
+    (async () => {
+      const pagesCache = await caches.open(PAGES_CACHE);
+      const assetsCache = await caches.open(ASSETS_CACHE);
 
-// ─── ACTIVATE: Clean ALL old caches + claim clients ──
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys.map((key) => {
-            if (!VALID_CACHES.includes(key)) {
-              return caches.delete(key);
-            }
-          }),
-        ),
-      )
-      .then(() => self.clients.claim()),
-  );
-});
+      // 🔥 Precache pages (avoid redirect pollution)
+      for (const url of APP_SHELL_PAGES) {
+        try {
+          const res = await fetch(url, {
+            redirect: "manual",
+            headers: { "x-sw": "1" },
+          });
 
-// ─── FETCH ───────────────────────────────────────
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Only handle GET
-  if (request.method !== "GET") return;
-
-  async function handleNavigation(request: Request): Promise<Response> {
-    try {
-      const response = await fetch(request);
-
-      if (response.ok) {
-        const cache = await caches.open(PAGES_CACHE);
-        cache.put(request, response.clone());
+          if (res.ok) {
+            const key = url.replace(/\/$/, "") || "/";
+            await pagesCache.put(key, res);
+          }
+        } catch {
+          // ignore
+        }
       }
 
-      return response;
-    } catch {
-      const cache = await caches.open(PAGES_CACHE);
+      // 🔥 Precache assets
+      for (const url of manifestUrls) {
+        try {
+          const res = await fetch(url, {
+            redirect: "manual",
+            headers: { "x-sw": "1" },
+          });
 
-      // 1. coba exact match
-      const cached = await cache.match(request);
-      if (cached) return cached;
+          if (res.ok) {
+            const key = new URL(url, self.location.origin).pathname;
+            await assetsCache.put(key, res);
+          }
+        } catch {
+          // ignore
+        }
+      }
 
-      // 2. fallback ke homepage (INI KUNCI NYA 🔥)
-      const fallback = (await cache.match("/en")) || (await cache.match("/"));
+      await self.skipWaiting();
+    })(),
+  );
+});
 
-      if (fallback) return fallback;
+// ─────────────────────────────────────────────
+// ACTIVATE
+// ─────────────────────────────────────────────
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
 
-      // 3. terakhir baru offline page
-      return offlineFallback();
-    }
+      await Promise.all(
+        keys.map((key) => {
+          if (!VALID_CACHES.includes(key)) {
+            return caches.delete(key);
+          }
+        }),
+      );
+
+      await self.clients.claim();
+    })(),
+  );
+});
+
+// ─────────────────────────────────────────────
+// FETCH
+// ─────────────────────────────────────────────
+self.addEventListener("fetch", (event) => {
+  const { request } = event;
+
+  // Only GET + same-origin
+  if (
+    request.method !== "GET" ||
+    !request.url.startsWith(self.location.origin)
+  ) {
+    return;
   }
 
-  // 1. Navigation (HTML pages)
+  const url = new URL(request.url);
+
+  // 1. Navigation (HTML)
   if (request.mode === "navigate") {
-    // event.respondWith(networkFirst(request, PAGES_CACHE, true));
     event.respondWith(handleNavigation(request));
     return;
   }
 
-  // 2. API GET requests
-  if (url.origin === self.location.origin && url.pathname.startsWith("/api/")) {
-    event.respondWith(networkFirst(request, API_CACHE, false));
+  // 2. API
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(networkFirst(request, API_CACHE));
     return;
   }
 
-  // 3. Same-origin static assets (JS, CSS, images, fonts)
-  if (url.origin === self.location.origin) {
-    event.respondWith(networkFirst(request, ASSETS_CACHE, false));
-    return;
-  }
+  // 3. Assets
+  event.respondWith(networkFirst(request, ASSETS_CACHE));
 });
 
-// ─── NetworkFirst Strategy ───────────────────────
-// Always try network. Cache the response. On failure, fallback to cache.
+// ─────────────────────────────────────────────
+// NAVIGATION HANDLER (APP SHELL)
+// ─────────────────────────────────────────────
+async function handleNavigation(request: Request): Promise<Response> {
+  const key = getCacheKey(request);
+
+  try {
+    const res = await fetch(request, {
+      headers: { "x-sw": "1" },
+    });
+
+    if (res.ok) {
+      const cache = await caches.open(PAGES_CACHE);
+      await cache.put(key, res.clone());
+    }
+
+    return res;
+  } catch {
+    const cache = await caches.open(PAGES_CACHE);
+
+    // Try exact match
+    const cached = (await cache.match(key)) || (await cache.match(key + "/"));
+
+    if (cached) return cached;
+
+    // 🔥 ALWAYS fallback to homepage
+    const fallback =
+      (await cache.match("/en")) ||
+      (await cache.match("/en/")) ||
+      (await cache.match("/"));
+
+    if (fallback) return fallback;
+
+    return offlineFallback();
+  }
+}
+
+// ─────────────────────────────────────────────
+// NETWORK FIRST (API + ASSETS)
+// ─────────────────────────────────────────────
 async function networkFirst(
   request: Request,
   cacheName: string,
-  isNavigation: boolean,
 ): Promise<Response> {
+  const key = getCacheKey(request);
+
   try {
-    const response = await fetch(request);
-    if (response.ok && response.type !== "opaque") {
+    const res = await fetch(request, {
+      headers: { "x-sw": "1" },
+    });
+
+    if (res.ok && res.type !== "opaque") {
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      await cache.put(key, res.clone());
     }
-    return response;
+
+    return res;
   } catch {
-    // Network failed → try cache
     const cache = await caches.open(cacheName);
-    const cached = await cache.match(request);
+
+    const cached = (await cache.match(key)) || (await cache.match(key + "/"));
+
     if (cached) return cached;
 
-    // Try matching without query string for navigation
-    if (isNavigation) {
-      const url = new URL(request.url);
-      const pathOnly = url.origin + url.pathname;
-      const cachedByPath = await cache.match(pathOnly);
-      if (cachedByPath) return cachedByPath;
-    }
-
-    // Nothing cached
-    if (isNavigation) {
-      const cache = await caches.open(PAGES_CACHE);
-
-      // fallback ke homepage
-      const fallback =
-        (await cache.match("/en")) ||
-        (await cache.match("/")) ||
-        (await cache.match("/en/index"));
-
-      if (fallback) return fallback;
-
-      return offlineFallback();
-    }
     return new Response("", { status: 503 });
   }
 }
 
+// ─────────────────────────────────────────────
+// OFFLINE FALLBACK
+// ─────────────────────────────────────────────
 function offlineFallback(): Response {
   return new Response(
     `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Offline - Working App</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,sans-serif;display:flex;
-      justify-content:center;align-items:center;min-height:100vh;
-      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-      color:#fff;text-align:center;padding:2rem}
-    .emoji{font-size:4rem;margin-bottom:1rem;animation:pulse 2s ease-in-out infinite}
-    h1{font-size:1.75rem;margin-bottom:.5rem}
-    p{opacity:.85;max-width:320px;line-height:1.5;margin-bottom:1.5rem}
-    button{padding:.75rem 2rem;border-radius:9999px;border:2px solid rgba(255,255,255,.5);
-      background:rgba(255,255,255,.15);color:#fff;font-size:1rem;
-      font-weight:600;cursor:pointer;backdrop-filter:blur(10px)}
-    button:hover{background:rgba(255,255,255,.25)}
-    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Offline</title>
+<style>
+body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#fff;text-align:center}
+</style>
 </head>
 <body>
-  <div>
-    <div class="emoji">📡</div>
-    <h1>You're Offline</h1>
-    <p>Please check your internet connection and try again.</p>
-    <button onclick="location.reload()">Try Again</button>
-  </div>
+<div>
+<h1>You're Offline</h1>
+<p>Please check your connection.</p>
+<button onclick="location.reload()">Retry</button>
+</div>
 </body>
 </html>`,
-    { status: 200, headers: { "Content-Type": "text/html" } },
+    { headers: { "Content-Type": "text/html" } },
   );
 }

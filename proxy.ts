@@ -34,22 +34,27 @@ function getLocale(pathname: string) {
 
 export function proxy(req: NextRequest) {
   console.log("🔥 MIDDLEWARE HIT:", req.nextUrl.pathname);
-  
+
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token_working_app")?.value;
-  
+  const isFromSW = req.headers.get("x-sw") === "1";
+
   const savedLocale = req.cookies.get("NEXT_LOCALE")?.value;
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
   // Force language persistence: If the URL has a different locale than the saved one,
   // redirect them. This fixes issues when using the "back" button to an old locale URL.
+
+  if (isFromSW) {
+    return intlMiddleware(req) ?? NextResponse.next();
+  }
   if (
     savedLocale &&
     LOCALES.includes(savedLocale as any) &&
     savedLocale !== locale &&
-    !pathname.startsWith('/serwist') &&
-    !pathname.endsWith('manifest.webmanifest')
+    !pathname.startsWith("/serwist") &&
+    !pathname.endsWith("manifest.webmanifest")
   ) {
     const url = req.nextUrl.clone();
     url.pathname = `/${savedLocale}${cleanPath}`;
@@ -62,12 +67,6 @@ export function proxy(req: NextRequest) {
 
   if (pathname.endsWith("manifest.webmanifest")) {
     return NextResponse.next();
-  }
-
-  if (cleanPath === "/admin") {
-    const url = req.nextUrl.clone();
-    url.pathname = `/${savedLocale || locale}/admin/dashboard`;
-    return NextResponse.redirect(url);
   }
 
   const isAuthPage = AUTH_PAGES.some((p) => cleanPath.startsWith(p));
