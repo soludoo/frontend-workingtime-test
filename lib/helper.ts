@@ -55,23 +55,37 @@ export const formatLeaveDateRange = (startDate: string, endDate: string) => {
 };
 
 export function calculateWorkDuration(session: any) {
-  if (!session?.clock_in) return "0h 0m";
+  if (!session) return "0h 0m";
+
+  if (session.status === "stopped" && session.work_duration_seconds) {
+    const totalSeconds = Math.floor(session.work_duration_seconds);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    return `${hours}h ${minutes}m`;
+  }
+
+  if (!session.clock_in) return "0h 0m";
 
   const start = new Date(session.clock_in).getTime();
-
-  let end = Date.now();
+  let end: number;
 
   if (session.status === "on_break" && session.breaks?.length) {
     const lastBreak = session.breaks[session.breaks.length - 1];
 
     if (lastBreak?.start_time && !lastBreak?.end_time) {
       end = new Date(lastBreak.start_time).getTime();
+    } else {
+      end = Date.now();
     }
+  } else {
+    end = Date.now();
   }
 
   const paused = (session.total_paused_seconds || 0) * 1000;
 
-  const totalSeconds = Math.floor((end - start - paused) / 1000);
+  const totalSeconds = Math.max(0, Math.floor((end - start - paused) / 1000));
 
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
