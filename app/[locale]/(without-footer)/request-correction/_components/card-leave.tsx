@@ -17,8 +17,8 @@ const CardLeave = ({
     <div className="border border-border rounded-[12px] p-4 flex justify-between gap-3">
       <div className="flex-1 flex flex-col gap-2">
         <h3 className="font-medium text-black">{type}</h3>
-        <p className="text-body text-sm">{title}</p>
         <p className="text-body text-sm">{date}</p>
+        <p className="text-body text-sm">{title}</p>
       </div>
       <Badge
         className={cn(

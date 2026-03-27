@@ -33,56 +33,60 @@ function getLocale(pathname: string) {
 }
 
 export function proxy(req: NextRequest) {
+  console.log("🔥 MIDDLEWARE HIT:", req.nextUrl.pathname);
+
   const { pathname } = req.nextUrl;
-
-  const isFromSW = req.headers.get("x-sw") === "1";
-
-  // 🔥 1. SW requests bypass everything
-  if (isFromSW) {
-    return intlMiddleware(req) ?? NextResponse.next();
-  }
-
   const token = req.cookies.get("token_working_app")?.value;
 
   const savedLocale = req.cookies.get("NEXT_LOCALE")?.value;
   const locale = getLocale(pathname);
   const cleanPath = stripLocale(pathname);
 
-  // 🔥 2. Skip internal
+  // Force language persistence: If the URL has a different locale than the saved one,
+  // redirect them. This fixes issues when using the "back" button to an old locale URL.
   if (
-    pathname.startsWith("/serwist") ||
-    pathname.startsWith("/_next") ||
-    pathname.endsWith("manifest.webmanifest")
+    savedLocale &&
+    LOCALES.includes(savedLocale as any) &&
+    savedLocale !== locale &&
+    !pathname.startsWith("/serwist") &&
+    !pathname.endsWith("manifest.webmanifest")
   ) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${savedLocale}${cleanPath}`;
+    return NextResponse.redirect(url);
+  }
+
+  if (pathname.startsWith("/serwist")) {
     return NextResponse.next();
   }
 
-  // 🔥 3. ONLY redirect if NO locale in URL
-  const hasLocale = LOCALES.includes(pathname.split("/")[1] as any);
+  if (pathname.endsWith("manifest.webmanifest")) {
+    return NextResponse.next();
+  }
 
-  if (!hasLocale && savedLocale) {
+  if (cleanPath === "/admin") {
     const url = req.nextUrl.clone();
-    url.pathname = `/${savedLocale}${pathname}`;
+    url.pathname = `/${savedLocale || locale}/admin/dashboard`;
     return NextResponse.redirect(url);
   }
 
   const isAuthPage = AUTH_PAGES.some((p) => cleanPath.startsWith(p));
 
-  // 🔥 4. Auth guard
   if (!token && !isAuthPage) {
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}/on-boarding`;
+    url.pathname = `/${savedLocale || locale}/on-boarding`;
     url.searchParams.set("redirect", cleanPath);
     return NextResponse.redirect(url);
   }
 
   if (token && isAuthPage) {
     const url = req.nextUrl.clone();
-    url.pathname = `/${locale}`;
+    url.pathname = `/${savedLocale || locale}`;
     return NextResponse.redirect(url);
   }
 
-  return intlMiddleware(req) ?? NextResponse.next();
+  const intlResponse = intlMiddleware(req);
+  return intlResponse ?? NextResponse.next();
 }
 
 export const config = {
