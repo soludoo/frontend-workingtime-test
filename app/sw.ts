@@ -21,15 +21,21 @@ const ASSETS_CACHE = `assets-${CACHE_VERSION}`;
 const VALID_CACHES = [PAGES_CACHE, API_CACHE, ASSETS_CACHE];
 
 // App shell pages (MUST always be cached)
+// Supported locales (keep in sync with next-intl)
+const SUPPORTED_LOCALES = ["en", "de"];
+
+// Build app shell dynamically
 const APP_SHELL_PAGES = [
-  "/en",
   "/",
-  "/en/settings",
-  "/en/settings/personal-information",
-  "/en/settings/preferences",
-  "/en/settings/support",
-  "/en/settings/about-app",
+  ...SUPPORTED_LOCALES.map((l) => `/${l}`),
+  ...SUPPORTED_LOCALES.map((l) => `/${l}/settings`),
 ];
+
+// Extract locale from URL
+function getLocaleFromPath(path: string): string {
+  const seg = path.split("/")[1];
+  return SUPPORTED_LOCALES.includes(seg) ? seg : "en";
+}
 
 // Helper: normalize URL → cache key
 function getCacheKey(request: Request): string {
@@ -147,6 +153,8 @@ self.addEventListener("fetch", (event) => {
 // ─────────────────────────────────────────────
 async function handleNavigation(request: Request): Promise<Response> {
   const key = getCacheKey(request);
+  const url = new URL(request.url);
+  const locale = getLocaleFromPath(url.pathname);
 
   try {
     const res = await fetch(request, {
@@ -162,16 +170,19 @@ async function handleNavigation(request: Request): Promise<Response> {
   } catch {
     const cache = await caches.open(PAGES_CACHE);
 
-    // Try exact match
+    // 1. exact match
     const cached = (await cache.match(key)) || (await cache.match(key + "/"));
 
     if (cached) return cached;
 
-    // 🔥 ALWAYS fallback to homepage
-    const fallback =
-      (await cache.match("/en")) ||
-      (await cache.match("/en/")) ||
-      (await cache.match("/"));
+    // 🔥 2. fallback to SAME LOCALE homepage
+    const localeHome =
+      (await cache.match(`/${locale}`)) || (await cache.match(`/${locale}/`));
+
+    if (localeHome) return localeHome;
+
+    // 🔥 3. fallback to default (en)
+    const fallback = (await cache.match("/en")) || (await cache.match("/"));
 
     if (fallback) return fallback;
 
